@@ -1,328 +1,406 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark-theme">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cognit - A Programming Language for the Future of AI</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cognit</title>
+<meta name="description" content="Cognit - A programming language for the future of AI and robotics">
 <style>
-  :root {
-    --bg: #262626;
-    --bg-card: #2e2e2e;
-    --bg-code: #333333;
-    --text: #e0e0e0;
-    --text-dim: #9e9e9e;
-    --accent: #327ac7;
-    --accent-hover: #4a9ae8;
-    --green: #4caf50;
-    --orange: #ffa726;
-    --purple: #ce93d8;
-    --pink: #f48fb1;
-    --cyan: #26c6da;
-    --border: #404040;
-    --radius: 8px;
-  }
-  * { margin:0; padding:0; box-sizing:border-box }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-  }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { color: var(--accent-hover); text-decoration: underline; }
+:root {
+  --bg: #262626;
+  --accent: #327ac7;
+  --text: #fff;
+  --text-secondary: #bbb;
+  --card-bg: #1e1e1e;
+  --border: #333;
+  --code-bg: #1a1a2e;
+  --link: #719af4;
+  --sidebar-bg: #2a2a2b;
+  --sidebar-hover: #333;
+  --sidebar-active: #28323a;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--accent); color: #fff; }
 
-  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+/* Layout */
+#wrapper { display: flex; min-height: 100vh; }
 
-  /* Navbar */
-  nav {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 16px 24px; max-width: 1100px; margin: 0 auto;
-    border-bottom: 1px solid var(--border);
-  }
-  nav .logo { font-size: 1.4rem; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 8px; }
-  nav .logo span { color: var(--text); }
-  nav .logo small { font-size: .7rem; color: var(--text-dim); font-weight: 400; }
-  nav .nav-links { display: flex; gap: 24px; align-items: center; }
-  nav .nav-links a { color: var(--text-dim); font-size: .9rem; }
-  nav .nav-links a:hover { color: var(--text); text-decoration: none; }
+/* Sidebar */
+#sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 2rem 0;
+}
+#sidebar h2 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  padding: 0 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+#sidebar ul { list-style: none; }
+#sidebar ul li a {
+  display: block;
+  padding: 0.5rem 1.5rem;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background 0.15s;
+  border-left: 3px solid transparent;
+}
+#sidebar ul li a:hover { background: var(--sidebar-hover); }
+#sidebar ul li a.active {
+  background: var(--sidebar-active);
+  border-left-color: var(--accent);
+  color: #fff;
+}
+#sidebar .logo {
+  font-size: 1.3rem;
+  font-weight: 700;
+  padding: 0 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+#sidebar .logo span { color: var(--accent); }
 
-  /* Hero */
-  .hero {
-    text-align: center; padding: 80px 24px 60px;
-    background: linear-gradient(180deg, #262626 0%, #2a2a2a 100%);
-  }
-  .hero h1 { font-size: 3rem; font-weight: 800; margin-bottom: 16px; letter-spacing: -.5px; }
-  .hero h1 em { color: var(--accent); font-style: normal; }
-  .hero p { font-size: 1.2rem; color: var(--text-dim); max-width: 640px; margin: 0 auto 32px; }
-  .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-  .btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 12px 28px; border-radius: var(--radius); font-weight: 600; font-size: 1rem;
-    transition: all .2s; cursor: pointer; border: none;
-  }
-  .btn-primary { background: var(--accent); color: #fff; }
-  .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); text-decoration: none; }
-  .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
-  .btn-secondary:hover { border-color: var(--text-dim); transform: translateY(-1px); text-decoration: none; }
+/* Main */
+#main {
+  flex: 1;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 3rem 3rem 6rem;
+}
+#main h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+#main .subtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+}
+#main h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+#main h3 {
+  font-size: 1.15rem;
+  font-weight: 500;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+#main p { margin-bottom: 1rem; color: var(--text-secondary); }
+#main ul { margin: 0 0 1.5rem 1.5rem; }
+#main ul li { margin-bottom: 0.5rem; color: var(--text-secondary); }
+#main ul li strong { color: var(--text); }
+#main a { color: var(--link); text-decoration: none; }
+#main a:hover { text-decoration: underline; }
 
-  /* Hero Code Block */
-  .hero-code {
-    margin: 40px auto 0; max-width: 560px;
-    background: var(--bg-code); border-radius: var(--radius);
-    border: 1px solid var(--border); overflow: hidden;
-    text-align: left;
-  }
-  .hero-code .header {
-    display: flex; align-items: center; gap: 8px;
-    padding: 10px 16px; background: #2e2e2e;
-    border-bottom: 1px solid var(--border);
-    font-size: .8rem; color: var(--text-dim);
-  }
-  .hero-code .header .dots { display: flex; gap: 6px; }
-  .hero-code .header .dots span { width: 10px; height: 10px; border-radius: 50%; }
-  .hero-code .header .dots span:nth-child(1) { background: #ff6b6b; }
-  .hero-code .header .dots span:nth-child(2) { background: #ffd93d; }
-  .hero-code .header .dots span:nth-child(3) { background: #6bcf7f; }
-  .hero-code pre {
-    padding: 20px; font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
-    font-size: .85rem; line-height: 1.7; overflow-x: auto;
-    color: #e6edf3;
-  }
-  .hero-code pre .kw { color: var(--purple); }
-  .hero-code pre .fn { color: var(--pink); }
-  .hero-code pre .str { color: var(--green); }
-  .hero-code pre .num { color: var(--orange); }
-  .hero-code pre .cm { color: var(--text-dim); font-style: italic; }
-  .hero-code pre .op { color: var(--cyan); }
-  .hero-code pre .tp { color: var(--accent); }
+/* Badge */
+.badge {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+}
+.badge.green { background: #2ea043; }
+.badge.orange { background: #d29922; }
+.badge.red { background: #da3633; }
 
-  /* Features */
-  .features { padding: 80px 0; }
-  .features h2 { text-align: center; font-size: 2rem; margin-bottom: 48px; }
-  .features-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
-  }
-  .feature-card {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 28px; transition: border-color .2s;
-  }
-  .feature-card:hover { border-color: var(--accent); }
-  .feature-card .icon { font-size: 2rem; margin-bottom: 12px; }
-  .feature-card h3 { margin-bottom: 8px; }
-  .feature-card p { color: var(--text-dim); font-size: .9rem; }
+/* Code */
+code {
+  font-family: "Cascadia Mono-SemiLight", Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85rem;
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #c9d1d9;
+}
+pre {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+pre .filename {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.75rem;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
 
-  /* Code Comparison */
-  .comparison { padding: 40px 0 80px; }
-  .comparison h2 { text-align: center; font-size: 2rem; margin-bottom: 48px; }
-  .comparison-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
-  }
-  .comparison-grid .code-block {
-    background: var(--bg-code); border-radius: var(--radius);
-    border: 1px solid var(--border); overflow: hidden;
-  }
-  .comparison-grid .code-block .label {
-    padding: 8px 16px; font-size: .8rem; font-weight: 600;
-    border-bottom: 1px solid var(--border);
-  }
-  .comparison-grid .code-block .label.cognit { color: var(--accent); }
-  .comparison-grid .code-block .label.js { color: var(--orange); }
-  .comparison-grid .code-block pre {
-    padding: 20px; font-family: 'JetBrains Mono', 'Fira Code', monospace;
-    font-size: .82rem; line-height: 1.7; overflow-x: auto;
-  }
+/* Version header */
+.version-header {
+  margin-bottom: 2rem;
+}
+.version-header .tag {
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.version-header h1 { margin-top: 0.25rem; }
+.version-header .date {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
 
-  /* Code Samples */
-  .samples { padding: 0 0 80px; }
-  .samples h2 { text-align: center; font-size: 2rem; margin-bottom: 48px; }
-  .sample-card {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 28px; margin-bottom: 20px;
-  }
-  .sample-card h3 { margin-bottom: 12px; font-size: 1.1rem; }
-  .sample-card .code-row {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
-  }
-  .sample-card pre {
-    background: var(--bg-code); border-radius: var(--radius);
-    padding: 16px; font-family: 'JetBrains Mono', 'Fira Code', monospace;
-    font-size: .82rem; line-height: 1.7; overflow-x: auto;
-  }
-  .sample-card pre small { display: block; color: var(--text-dim); font-size: .75rem; margin-bottom: 8px; }
+/* Playground button */
+.play-btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  margin-bottom: 2rem;
+  transition: background 0.15s;
+}
+.play-btn:hover { background: #4a9ae8; text-decoration: none; }
 
-  /* CTA */
-  .cta {
-    text-align: center; padding: 60px 24px;
-    border-top: 1px solid var(--border);
-  }
-  .cta h2 { font-size: 2rem; margin-bottom: 16px; }
-  .cta p { color: var(--text-dim); margin-bottom: 24px; }
+/* Feature card */
+.feature {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+.feature h3 { margin-top: 0; }
+.feature p:last-child { margin-bottom: 0; }
 
-  /* Footer */
-  footer {
-    text-align: center; padding: 32px 24px;
-    color: var(--text-dim); font-size: .85rem;
-    border-top: 1px solid var(--border);
-  }
-  footer a { color: var(--text-dim); }
+/* Divider */
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 3rem 0;
+}
 
-  @media (max-width: 768px) {
-    .hero h1 { font-size: 2rem; }
-    .comparison-grid { grid-template-columns: 1fr; }
-    .sample-card .code-row { grid-template-columns: 1fr; }
-    nav .nav-links { gap: 12px; }
-  }
+/* Scrollbar */
+#sidebar::-webkit-scrollbar { width: 6px; }
+#sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+pre::-webkit-scrollbar { height: 6px; }
+pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+@media (max-width: 800px) {
+  #sidebar { display: none; }
+  #main { padding: 2rem 1.5rem 6rem; }
+  #main h1 { font-size: 1.8rem; }
+}
 </style>
 </head>
 <body>
+<div id="wrapper">
+    <nav id="sidebar">
+    <div class="logo">λ <span>Cognit</span></div>
+    <h2>Links</h2>
+    <ul>
+      <li><a href="play.html">▶ Playground</a></li>
+    </ul>
+    <h2 style="margin-top:1.5rem">Releases</h2>
+    <ul>
+      <li><a href="#v0-1-0" class="active">v0.1.0</a></li>
+      <li><a href="#v0-0-1">v0.0.1</a></li>
+    </ul>
+  </nav>
 
-<nav>
-  <a href="/" class="logo">λ <span>Cognit</span><small>v0.1</small></a>
-  <div class="nav-links">
-    <a href="play.html">Playground</a>
-    <a href="https://github.com/anomalyco/cognit">GitHub</a>
-  </div>
-</nav>
-
-<section class="hero">
-  <div class="container">
-    <h1>JavaScript &mdash; <em>Reimagined</em></h1>
-    <p>Cognit is a modern, expressive programming language that compiles to JavaScript. Designed for AI workflows &mdash; functional pipes, pattern matching, string interpolation &mdash; zero boilerplate.</p>
-    <div class="hero-buttons">
-      <a href="play.html" class="btn btn-primary">&#9654; Try Cognit Now</a>
-      <a href="https://github.com/anomalyco/cognit" class="btn btn-secondary">View on GitHub</a>
-    </div>
-    <div class="hero-code">
-      <div class="header">
-        <div class="dots"><span></span><span></span><span></span></div>
-        <span>hello.cgn</span>
+  <main id="main">
+    <section id="v0-1-0">
+      <div class="version-header">
+        <div class="tag">Latest Release</div>
+        <h1>Version 0.1.0</h1>
+        <div class="date">17 June 2026</div>
       </div>
-      <pre><span class="cm"># Hello World</span>
-<span class="kw">fn</span> <span class="fn">greet</span>(name) {
-    <span class="str">"Hello, {name}!"</span>
-}
 
-<span class="kw">let</span> numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-<span class="kw">let</span> evens = numbers
-    <span class="op">|&gt;</span> <span class="fn">filter</span>(<span class="kw">fn</span>(x) <span class="op">-&gt;</span> x <span class="op">%</span> 2 <span class="op">==</span> 0)
-    <span class="op">|&gt;</span> <span class="fn">map</span>(<span class="kw">fn</span>(x) <span class="op">-&gt;</span> x <span class="op">*</span> x)
+      <p>
+        Cognit 0.1.0 is the first public release — a general-purpose programming language
+        designed for the future of AI and robotics, compiling to JavaScript.
+      </p>
 
-<span class="fn">print</span>(<span class="str">"Squares: {evens}"</span>)
+      <a href="play.html" class="play-btn">▶ Try it in the Playground</a>
 
-<span class="kw">fn</span> <span class="fn">factorial</span>(n) {
-    <span class="kw">if</span> n <span class="op">&lt;=</span> <span class="num">1</span> <span class="op">-&gt;</span> <span class="num">1</span>
-    <span class="kw">else</span> <span class="op">-&gt;</span> n <span class="op">*</span> <span class="fn">factorial</span>(n <span class="op">-</span> <span class="num">1</span>)
-}
+      <h2>Language Features</h2>
 
-<span class="fn">print</span>(<span class="fn">factorial</span>(<span class="num">5</span>))</pre>
-    </div>
-  </div>
-</section>
-
-
-
-<section class="comparison">
-  <div class="container">
-    <h2>Cognit vs JavaScript</h2>
-    <div class="comparison-grid">
-      <div class="code-block">
-        <div class="label cognit">Cognit</div>
-        <pre><span class="kw">fn</span> <span class="fn">fizzbuzz</span>(n) {
-    <span class="kw">if</span> n <span class="op">%</span> <span class="num">15</span> <span class="op">==</span> <span class="num">0</span> <span class="op">-&gt;</span> <span class="str">"FizzBuzz"</span>
-    <span class="kw">else if</span> n <span class="op">%</span> <span class="num">3</span> <span class="op">==</span> <span class="num">0</span> <span class="op">-&gt;</span> <span class="str">"Fizz"</span>
-    <span class="kw">else if</span> n <span class="op">%</span> <span class="num">5</span> <span class="op">==</span> <span class="num">0</span> <span class="op">-&gt;</span> <span class="str">"Buzz"</span>
-    <span class="kw">else</span> <span class="op">-&gt;</span> n
-}
-
-<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">16</span>) {
-    <span class="fn">print</span>(<span class="fn">fizzbuzz</span>(i))
-}</pre>
+      <div class="feature">
+        <h3>Functional Pipes <span class="badge">new</span></h3>
+        <p>Chain operations with the <code>|></code> pipe operator. The piped value is passed as the first argument.</p>
+        <pre><code>let result = numbers
+    |> filter(fn(x) -> x % 2 == 0)
+    |> map(fn(x) -> x * x)
+    |> reduce(fn(acc, x) -> acc + x, 0)</code></pre>
       </div>
-      <div class="code-block">
-        <div class="label js">JavaScript</div>
-        <pre><span class="kw">function</span> <span class="fn">fizzbuzz</span>(n) {
-    <span class="kw">if</span> (n <span class="op">%</span> <span class="num">15</span> <span class="op">===</span> <span class="num">0</span>) <span class="kw">return</span> <span class="str">"FizzBuzz"</span>
-    <span class="kw">if</span> (n <span class="op">%</span> <span class="num">3</span> <span class="op">===</span> <span class="num">0</span>) <span class="kw">return</span> <span class="str">"Fizz"</span>
-    <span class="kw">if</span> (n <span class="op">%</span> <span class="num">5</span> <span class="op">===</span> <span class="num">0</span>) <span class="kw">return</span> <span class="str">"Buzz"</span>
-    <span class="kw">return</span> n
-}
 
-<span class="kw">for</span> (<span class="kw">const</span> i <span class="kw">of</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">16</span>)) {
-    <span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">fizzbuzz</span>(i))
-}</pre>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="samples">
-  <div class="container">
-    <h2>More Examples</h2>
-
-    <div class="sample-card">
-      <h3>Functional Pipelines</h3>
-      <div class="code-row">
-        <pre><small>Cognit</small><span class="kw">let</span> result = numbers
-    <span class="op">|&gt;</span> <span class="fn">filter</span>(<span class="kw">fn</span>(x) <span class="op">-&gt;</span> x <span class="op">%</span> <span class="num">2</span> <span class="op">==</span> <span class="num">0</span>)
-    <span class="op">|&gt;</span> <span class="fn">map</span>(<span class="kw">fn</span>(x) <span class="op">-&gt;</span> x <span class="op">*</span> x)
-    <span class="op">|&gt;</span> <span class="fn">reduce</span>(<span class="kw">fn</span>(acc, x) <span class="op">-&gt;</span> acc <span class="op">+</span> x, <span class="num">0</span>)</pre>
-        <pre><small>Generated JS</small><span class="kw">const</span> result = <span class="fn">reduce</span>(
-    <span class="fn">map</span>(<span class="fn">filter</span>(numbers, fn1), fn2),
-    fn3, <span class="num">0</span>
-)</pre>
-      </div>
-    </div>
-
-    <div class="sample-card">
-      <h3>Pattern Matching</h3>
-      <div class="code-row">
-        <pre><small>Cognit</small><span class="kw">fn</span> <span class="fn">describe</span>(n) {
-    <span class="kw">match</span> n {
-        <span class="num">0</span> <span class="op">-&gt;</span> <span class="str">"zero"</span>
-        <span class="num">1</span> <span class="op">-&gt;</span> <span class="str">"one"</span>
-        <span class="num">2</span> <span class="op">-&gt;</span> <span class="str">"two"</span>
-        _ <span class="op">-&gt;</span> <span class="str">"many"</span>
+      <div class="feature">
+        <h3>Pattern Matching <span class="badge">new</span></h3>
+        <p>Express complex branching with <code>match</code> and pattern cases.</p>
+        <pre><code>fn describe(n) {
+    match n {
+        0 -> "zero"
+        1 -> "one"
+        _ -> "many"
     }
-}</pre>
-        <pre><small>Generated JS</small><span class="kw">function</span> <span class="fn">describe</span>(n) {
-    <span class="kw">return</span> (<span class="kw">function</span>() {
-        <span class="kw">if</span> (n <span class="op">===</span> <span class="num">0</span>) { <span class="kw">return</span> <span class="str">"zero"</span>; }
-        <span class="kw">if</span> (n <span class="op">===</span> <span class="num">1</span>) { <span class="kw">return</span> <span class="str">"one"</span>; }
-        <span class="kw">if</span> (n <span class="op">===</span> <span class="num">2</span>) { <span class="kw">return</span> <span class="str">"two"</span>; }
-        { <span class="kw">return</span> <span class="str">"many"</span>; }
-    })();
-}</pre>
+}</code></pre>
       </div>
-    </div>
 
-    <div class="sample-card">
-      <h3>String Interpolation</h3>
-      <div class="code-row">
-        <pre><small>Cognit</small><span class="kw">let</span> name = <span class="str">"Cognit"</span>
-<span class="kw">let</span> version = <span class="num">0.1</span>
-<span class="fn">print</span>(<span class="str">"Welcome to {name} v{version}!"</span>)</pre>
-        <pre><small>Generated JS</small><span class="kw">const</span> name = <span class="str">"Cognit"</span>;
-<span class="kw">const</span> version = <span class="num">0.1</span>;
-<span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Welcome to "</span> <span class="op">+</span> <span class="fn">String</span>(name) <span class="op">+</span> <span class="str">" v"</span> <span class="op">+</span> <span class="fn">String</span>(version) <span class="op">+</span> <span class="str">"!"</span>);</pre>
+      <div class="feature">
+        <h3>String Interpolation <span class="badge">new</span></h3>
+        <p>Embed expressions directly in strings with <code>{expr}</code> syntax.</p>
+        <pre><code>let name = "Cognit"
+print("Hello, {name}!")  // Hello, Cognit!</code></pre>
       </div>
-    </div>
-  </div>
-</section>
 
-<section class="cta">
-  <div class="container">
-    <h2>Ready to Try Cognit?</h2>
-    <p>No installation needed. Write and run Cognit directly in your browser.</p>
-    <a href="play.html" class="btn btn-primary">&#9654; Open Playground</a>
-  </div>
-</section>
+      <div class="feature">
+        <h3>Expression-oriented If <span class="badge">new</span></h3>
+        <p>Every <code>if</code> expression returns a value — no ternary operator needed.</p>
+        <pre><code>let grade = if score >= 90 -> "A"
+            else if score >= 80 -> "B"
+            else -> "F"</code></pre>
+      </div>
 
-<footer>
-  <div class="container">
-    <p>Made with &#9829; by <a href="https://github.com/anomalyco">anomalyco</a> &middot; <a href="https://github.com/anomalyco/cognit">GitHub</a> &middot; <a href="play.html">Playground</a></p>
-  </div>
-</footer>
+      <div class="feature">
+        <h3>Exponentiation &amp; Matrix Multiply <span class="badge">new</span></h3>
+        <p>Two new operators: <code>**</code> for exponentiation and <code>@</code> for matrix multiplication.</p>
+        <pre><code>let x = 2 ** 10   // 1024
+let y = a @ b     // matrix multiply</code></pre>
+      </div>
 
+      <h2>Tensor &amp; AI</h2>
+
+      <div class="feature">
+        <h3>Tensor Operations <span class="badge">new</span></h3>
+        <p>First-class tensor type with arithmetic, matrix multiplication, and shape manipulation.</p>
+        <pre><code>let a = vec(1, 2, 3)
+let b = vec(4, 5, 6)
+print(a.add(b).data)    // [5, 7, 9]
+print(a.matmul(b).data) // 32
+
+let m = mat([[1, 2], [3, 4]])
+print(eye(3).data)      // identity matrix
+print(zeros(2, 3))      // zero matrix</code></pre>
+      </div>
+
+      <div class="feature">
+        <h3>Agent Syntax <span class="badge">new</span></h3>
+        <p>Declarative agent configuration blocks for LLM integration.</p>
+        <pre><code>let assistant = agent {
+    model = "gpt-4"
+    temperature = 0.7
+    instructions = "You are helpful"
+}</code></pre>
+      </div>
+
+      <h2>Runtime</h2>
+
+      <div class="feature">
+        <h3>Collection Utilities <span class="badge">new</span></h3>
+        <p>Built-in <code>map</code>, <code>filter</code>, <code>reduce</code>, <code>range</code>, <code>sort</code>, <code>reverse</code>, <code>chunk</code>, <code>unique</code>, <code>zip</code>, <code>flatten</code>, <code>group_by</code>, and more.</p>
+      </div>
+
+      <div class="feature">
+        <h3>JSON Support <span class="badge">new</span></h3>
+        <p>Parse and stringify JSON with <code>json_parse</code> and <code>json_stringify</code>.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Math Functions <span class="badge">new</span></h3>
+        <p><code>cos</code>, <code>sin</code>, <code>sqrt</code>, <code>exp</code> built into the runtime.</p>
+      </div>
+
+      <h2>Tooling</h2>
+
+      <div class="feature">
+        <h3>REPL <span class="badge">new</span></h3>
+        <p>Run <code>cognit</code> without arguments to start an interactive REPL with <code>.exit</code> to quit.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Error Messages <span class="badge">improved</span></h3>
+        <p>Compile and parse errors now show the exact source line with a <code>^</code> caret pointing to the problem.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Playground <span class="badge">new</span></h3>
+        <p>Try Cognit in your browser at <a href="https://mmdj04.github.io/cognit/play.html">mmdj04.github.io/cognit</a> with syntax highlighting, live compilation, and example selector.</p>
+      </div>
+    </section>
+
+    <hr>
+
+    <section id="v0-0-1">
+      <div class="version-header">
+        <div class="tag">Preview Release</div>
+        <h1>Version 0.0.1</h1>
+        <div class="date">10 June 2026</div>
+      </div>
+
+      <p>Initial preview release. Core compiler (lexer, parser, generator), CLI, and basic examples.</p>
+
+      <div class="feature">
+        <h3>Core Language</h3>
+        <ul>
+          <li><strong>Let / Var bindings</strong> — immutable and mutable variable declarations</li>
+          <li><strong>Functions</strong> — first-class functions with arrow syntax</li>
+          <li><strong>Lists and Dicts</strong> — array and object literals</li>
+          <li><strong>For / While loops</strong> — imperative control flow</li>
+          <li><strong>Import system</strong> — module loading</li>
+        </ul>
+      </div>
+
+      <div class="feature">
+        <h3>Compiler</h3>
+        <ul>
+          <li><strong>Lexer</strong> — tokenization with indent tracking and string interpolation</li>
+          <li><strong>Parser</strong> — recursive descent parser with precedence climbing</li>
+          <li><strong>Generator</strong> — JavaScript code generation with runtime injection</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</div>
 </body>
 </html>

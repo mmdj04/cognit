@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Release Notes · Cognit</title>
-<meta name="description" content="Cognit Release Notes">
+<title>Cognit</title>
+<meta name="description" content="Cognit - A programming language for the future of AI and robotics">
 <style>
 :root {
   --bg: #262626;
@@ -188,6 +188,21 @@ pre .filename {
   margin-top: 0.25rem;
 }
 
+/* Playground button */
+.play-btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  margin-bottom: 2rem;
+  transition: background 0.15s;
+}
+.play-btn:hover { background: #4a9ae8; text-decoration: none; }
+
 /* Feature card */
 .feature {
   background: var(--card-bg);
@@ -221,9 +236,13 @@ pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 </head>
 <body>
 <div id="wrapper">
-  <nav id="sidebar">
+    <nav id="sidebar">
     <div class="logo">λ <span>Cognit</span></div>
-    <h2>Releases</h2>
+    <h2>Links</h2>
+    <ul>
+      <li><a href="play.html">▶ Playground</a></li>
+    </ul>
+    <h2 style="margin-top:1.5rem">Releases</h2>
     <ul>
       <li><a href="#v0-1-0" class="active">v0.1.0</a></li>
       <li><a href="#v0-0-1">v0.0.1</a></li>
@@ -242,6 +261,8 @@ pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
         Cognit 0.1.0 is the first public release — a general-purpose programming language
         designed for the future of AI and robotics, compiling to JavaScript.
       </p>
+
+      <a href="play.html" class="play-btn">▶ Try it in the Playground</a>
 
       <h2>Language Features</h2>
 
