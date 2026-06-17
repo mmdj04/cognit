@@ -84,14 +84,10 @@ body {
   padding: 3rem 3rem 6rem;
 }
 #main h1 { font-size: 2.5rem; font-weight: 600; margin-bottom: 0.25rem; }
-#main .subtitle { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 2rem; }
 #main h2 {
   font-size: 1.5rem;
   font-weight: 500;
-  margin-top: 3rem;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.5rem;
 }
 #main h3 { font-size: 1.15rem; font-weight: 500; margin-top: 1.5rem; margin-bottom: 0.75rem; }
 #main h4 { font-size: 1rem; font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem; color: var(--accent); }
@@ -139,10 +135,7 @@ pre code { background: none; padding: 0; font-size: 0.85rem; line-height: 1.5; }
 .feature h3 { margin-top: 0; }
 .feature p:last-child { margin-bottom: 0; }
 .feature ul { margin-bottom: 0; }
-.toc { margin-bottom: 2rem; padding: 1.5rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; }
-.toc h3 { margin-top: 0; margin-bottom: 0.5rem; }
-.toc a { display: block; padding: 0.2rem 0; font-size: 0.9rem; }
-.toc a.sub { padding-left: 1.5rem; font-size: 0.85rem; color: var(--text-secondary); }
+
 #sidebar::-webkit-scrollbar { width: 6px; }
 #sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 pre::-webkit-scrollbar { height: 6px; }
@@ -180,19 +173,19 @@ td { color: var(--text-secondary); }
   </nav>
 
   <main id="main">
-    <div style="margin-bottom:0.5rem; font-size:0.85rem; color:var(--accent); font-weight:600; text-transform:uppercase; letter-spacing:0.05em;">Current Release</div>
-    <h1>Version 0.0.1</h1>
-    <div class="subtitle">17 June 2026 — Everything built in the Cognit project so far.</div>
-
-    <div class="toc">
-      <h3>Summary</h3>
-      <p>Cognit is a general-purpose programming language designed for AI and robotics, compiling to JavaScript. The entire project — compiler, runtime, CLI, playground, and tooling — was built from scratch.</p>
+    <div class="feature" style="text-align:center;">
+      <div style="font-size:0.85rem; color:var(--accent); font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.25rem;">Current Release</div>
+      <h1 style="font-size:2.5rem; font-weight:600; margin-bottom:0.25rem;">Version 0.0.1</h1>
+      <div style="color:var(--text-secondary); font-size:1.1rem; margin-bottom:0.5rem;">17 June 2026 — Everything built in the Cognit project so far.</div>
+      <p style="margin-bottom:0;">Cognit is a general-purpose programming language designed for AI and robotics, compiling to JavaScript. The entire project — compiler, runtime, CLI, playground, and tooling — was built from scratch.</p>
     </div>
 
     <!-- ==================== COMPILER ==================== -->
     <section id="compiler">
-      <h2>1. Compiler</h2>
-      <p>Three-phase pipeline: <strong>Lexer → Parser → Generator</strong>. Pure JavaScript, zero dependencies.</p>
+      <div class="feature">
+        <h2>1. Compiler</h2>
+        <p>Three-phase pipeline: <strong>Lexer → Parser → Generator</strong>. Pure JavaScript, zero dependencies.</p>
+      </div>
 
       <div class="feature">
         <h3>Lexer</h3>
@@ -247,7 +240,9 @@ td { color: var(--text-secondary); }
 
     <!-- ==================== LANGUAGE ==================== -->
     <section id="language">
-      <h2>2. Language</h2>
+      <div class="feature">
+        <h2>2. Language</h2>
+      </div>
 
       <div class="feature">
         <h3>Syntax Overview</h3>
@@ -332,8 +327,10 @@ let o = ones(3)                 // ones vector</code></pre>
 
     <!-- ==================== RUNTIME ==================== -->
     <section id="runtime">
-      <h2>3. Runtime</h2>
-      <p>All runtime functions are injected into the generated JavaScript. No imports needed.</p>
+      <div class="feature">
+        <h2>3. Runtime</h2>
+        <p>All runtime functions are injected into the generated JavaScript. No imports needed.</p>
+      </div>
 
       <div class="feature">
         <h3>IO &amp; Utilities</h3>
@@ -417,7 +414,9 @@ let o = ones(3)                 // ones vector</code></pre>
 
     <!-- ==================== CLI ==================== -->
     <section id="cli">
-      <h2>4. CLI</h2>
+      <div class="feature">
+        <h2>4. CLI</h2>
+      </div>
 
       <div class="feature">
         <h3>Commands</h3>
@@ -448,7 +447,9 @@ let o = ones(3)                 // ones vector</code></pre>
 
     <!-- ==================== WEB PAGES ==================== -->
     <section id="web">
-      <h2>5. Web Pages</h2>
+      <div class="feature">
+        <h2>5. Web Pages</h2>
+      </div>
 
       <div class="feature">
         <h3>Release Notes Page</h3>
@@ -472,7 +473,9 @@ let o = ones(3)                 // ones vector</code></pre>
 
     <!-- ==================== EXAMPLES ==================== -->
     <section id="examples">
-      <h2>6. Examples</h2>
+      <div class="feature">
+        <h2>6. Examples</h2>
+      </div>
 
       <div class="feature">
         <h3>hello.cgn</h3>
@@ -549,7 +552,9 @@ fn letter_grade(score) {
 
     <!-- ==================== TOOLING ==================== -->
     <section id="tooling">
-      <h2>7. Tooling</h2>
+      <div class="feature">
+        <h2>7. Tooling</h2>
+      </div>
 
       <div class="feature">
         <h3>VS Code Extension</h3>
@@ -626,7 +631,9 @@ fn letter_grade(score) {
 
     <!-- ==================== FIXES ==================== -->
     <section id="fixes">
-      <h2>8. Bugs Fixed</h2>
+      <div class="feature">
+        <h2>8. Bugs Fixed</h2>
+      </div>
 
       <div class="feature">
         <table>
