@@ -33,28 +33,22 @@ body {
 }
 ::selection { background: var(--accent); color: #ffffff; }
 
-/* Top bar */
-#topbar {
+.toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 1rem 2rem;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
 }
-#topbar .logo {
+.toolbar .logo {
   font-size: 1.3rem;
   font-weight: 700;
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  margin-right: auto;
 }
-#topbar .logo span { color: var(--accent); }
-#topbar .right { display: flex; align-items: center; gap: 1rem; }
-#topbar select {
+.toolbar .logo span { color: var(--accent); }
+.toolbar select {
   background: var(--card-bg);
   color: var(--text);
   border: 1px solid var(--border);
@@ -64,7 +58,7 @@ body {
   cursor: pointer;
   outline: none;
 }
-#topbar select:focus { border-color: var(--accent); }
+.toolbar select:focus { border-color: var(--accent); }
 .play-btn {
   display: inline-block;
   background: var(--accent);
@@ -75,6 +69,7 @@ body {
   border-radius: 4px;
   text-decoration: none;
   transition: background 0.15s;
+  white-space: nowrap;
 }
 .play-btn:hover { background: #327ac7; text-decoration: none; }
 
@@ -136,7 +131,7 @@ td { color: var(--text); }
 pre::-webkit-scrollbar { height: 6px; }
 pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 @media (max-width: 800px) {
-  #topbar { flex-wrap: wrap; gap: 0.5rem; padding: 0.75rem 1rem; }
+  .toolbar { flex-wrap: wrap; gap: 0.5rem; }
   #main { padding: 1rem 0.75rem 4rem; }
   #main h1 { font-size: 1.8rem; }
   #main .header-content { padding: 0 1rem; }
@@ -150,19 +145,15 @@ pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 </head>
 <body>
 
-<div id="topbar">
-  <div class="logo">λ <span>Cognit</span></div>
-  <div class="right">
-    <select id="version-select" onchange="switchVersion(this.value)">
-      <option value="v0.0.1" selected>v0.0.1 (current)</option>
-    </select>
-    <a href="play.html" class="play-btn">▶ Playground</a>
-  </div>
-</div>
-
 <main id="main">
     <div class="header-content">
-      <div style="font-size:0.85rem; color:var(--accent); font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.25rem;">Current Release</div>
+      <div class="toolbar">
+        <div class="logo">λ <span>Cognit</span></div>
+        <select id="version-select" onchange="switchVersion(this.value)">
+          <option value="v0.0.1" selected>v0.0.1 (current)</option>
+        </select>
+        <a href="play.html" class="play-btn">▶ Playground</a>
+      </div>
       <h1>Version 0.0.1</h1>
       <div style="font-size:1.1rem; margin-bottom:0.5rem;">17 June 2026 — Everything built in the Cognit project so far.</div>
       <p>Cognit is a general-purpose programming language designed for AI and robotics, compiling to JavaScript. The entire project — compiler, runtime, CLI, playground, LSP server, and tooling — was built from scratch.</p>
