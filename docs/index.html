@@ -8,13 +8,13 @@
 <style>
 :root {
   --bg: #262626;
-  --accent: #327ac7;
+  --accent: #4a9ae8;
   --text: #fff;
   --text-secondary: #bbb;
   --card-bg: #303030;
   --border: #404040;
   --code-bg: #050505;
-  --link: #719af4;
+  --link: #6ab0f3;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -70,7 +70,7 @@ body {
   text-decoration: none;
   transition: background 0.15s;
 }
-.play-btn:hover { background: #4a9ae8; text-decoration: none; }
+.play-btn:hover { background: #5bbff9; text-decoration: none; }
 
 /* Main */
 #main {
@@ -149,7 +149,7 @@ pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     <div style="font-size:0.85rem; color:var(--accent); font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.25rem;">Current Release</div>
     <h1>Version 0.0.1</h1>
     <div style="color:var(--text-secondary); font-size:1.1rem; margin-bottom:0.5rem;">17 June 2026 — Everything built in the Cognit project so far.</div>
-    <p style="color:var(--text-secondary);">Cognit is a general-purpose programming language designed for AI and robotics, compiling to JavaScript. The entire project — compiler, runtime, CLI, playground, and tooling — was built from scratch.</p>
+    <p style="color:var(--text-secondary);">Cognit is a general-purpose programming language designed for AI and robotics, compiling to JavaScript. The entire project — compiler, runtime, CLI, playground, LSP server, and tooling — was built from scratch.</p>
   </div>
 
   <div class="feature">
@@ -461,13 +461,26 @@ fn letter_grade(score) {
       <h2>7. Tooling</h2>
 
       <h3>VS Code Extension</h3>
-      <p>Located at <code>vscode-cognit/</code>. Provides syntax highlighting for <code>.cgn</code> files with TextMate grammar covering:</p>
+      <p>Located at <code>vscode-cognit/</code>. Provides syntax highlighting via TextMate grammar and full LSP integration:</p>
       <ul>
         <li>Keywords, operators, built-in functions</li>
         <li>String interpolation highlighting</li>
         <li>Comments, numbers, strings</li>
         <li>Language configuration (brackets, auto-closing pairs)</li>
+        <li><strong>LSP client</strong> — connects to <code>cognit-lsp</code> for real-time diagnostics, completions, hover docs, and document symbols</li>
       </ul>
+      <p>Install dependencies: <code>cd vscode-cognit && npm install vscode-languageclient</code></p>
+
+      <h3>LSP Server</h3>
+      <p>Located at <code>src/lsp/server.js</code>. Implements the Language Server Protocol over stdin/stdout for any LSP-compatible editor.</p>
+      <ul>
+        <li><strong>Diagnostics</strong> — real-time compile errors with precise location</li>
+        <li><strong>Completions</strong> — keywords, built-in functions (with param signatures), and user-defined symbols</li>
+        <li><strong>Hover</strong> — documentation for all built-in functions on hover</li>
+        <li><strong>Document Symbols</strong> — lists <code>let</code>/<code>var</code> bindings and <code>fn</code> definitions for file outline</li>
+        <li><strong>Zero dependencies</strong> — uses only the existing compiler modules (<code>Lexer</code> + <code>Parser</code>)</li>
+      </ul>
+      <p>Run standalone: <code>cognit-lsp</code> or <code>node src/lsp/server.js</code></p>
 
       <h3>Test Suite</h3>
       <p>Located at <code>tests/run.js</code>. 21 tests covering:</p>
@@ -503,6 +516,8 @@ fn letter_grade(score) {
 │   │   └── generator.js   # JS code generator
 │   ├── cli/
 │   │   └── index.js       # CLI + REPL
+│   ├── lsp/
+│   │   └── server.js      # LSP server
 │   └── runtime/
 │       └── index.js       # Standard library
 ├── docs/

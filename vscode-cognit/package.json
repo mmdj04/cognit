@@ -1,12 +1,14 @@
 {
   "name": "cognit",
   "displayName": "Cognit Language Support",
-  "description": "Syntax highlighting for Cognit (.cgn)",
-  "version": "0.1.0",
+  "description": "Syntax highlighting and LSP support for Cognit (.cgn)",
+  "version": "0.2.0",
   "publisher": "mmdj04",
   "license": "MIT",
   "engines": { "vscode": "^1.80.0" },
   "categories": ["Programming Languages"],
+  "activationEvents": ["onLanguage:cognit"],
+  "main": "./extension.js",
   "contributes": {
     "languages": [{
       "id": "cognit",

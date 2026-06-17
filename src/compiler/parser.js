@@ -113,7 +113,9 @@ export class Parser {
 
   parseLetBinding() {
     this.advance()
-    const name = this.expect("Identifier").value
+    const t = this.peek(-1)
+    const nameTok = this.expect("Identifier")
+    const name = nameTok.value
     let typeAnnot = null
     if (this.isAt(":")) {
       this.advance()
@@ -122,12 +124,13 @@ export class Parser {
     this.expect("Assign")
     while (this.isAt("Newline") || this.isAt("Indent")) this.advance()
     const value = this.parseExpression()
-    return new ASTNode("LetBinding", { name, typeAnnot, value })
+    return new ASTNode("LetBinding", { name, typeAnnot, value, line: nameTok.line, col: nameTok.col })
   }
 
   parseVarBinding() {
     this.advance()
-    const name = this.expect("Identifier").value
+    const nameTok = this.expect("Identifier")
+    const name = nameTok.value
     let typeAnnot = null
     if (this.isAt(":")) {
       this.advance()
@@ -136,7 +139,7 @@ export class Parser {
     this.expect("Assign")
     while (this.isAt("Newline") || this.isAt("Indent")) this.advance()
     const value = this.parseExpression()
-    return new ASTNode("VarBinding", { name, typeAnnot, value })
+    return new ASTNode("VarBinding", { name, typeAnnot, value, line: nameTok.line, col: nameTok.col })
   }
 
   parseFnDef() {
@@ -146,7 +149,8 @@ export class Parser {
       this.advance()
       isAsync = true
     }
-    const name = this.expect("Identifier").value
+    const nameTok = this.expect("Identifier")
+    const name = nameTok.value
     this.expect("(")
     const params = []
     while (!this.isAt(")") && !this.isAt("EOF")) {
@@ -170,7 +174,7 @@ export class Parser {
       returnType = this.parseType()
     }
     const body = this.parseBlockOrExpr()
-    return new ASTNode("FnDef", { name, params, returnType, body, isAsync })
+    return new ASTNode("FnDef", { name, params, returnType, body, isAsync, line: nameTok.line, col: nameTok.col })
   }
 
   parseFnExpr() {
