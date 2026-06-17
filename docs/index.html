@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cognit</title>
-<meta name="description" content="Cognit - A programming language for the future of AI and robotics">
+<title>Cognit v0.0.1</title>
+<meta name="description" content="Cognit v0.0.1 - Everything built so far">
 <style>
 :root {
   --bg: #262626;
@@ -47,16 +47,17 @@ body {
   letter-spacing: 0.1em;
   color: var(--text-secondary);
   padding: 0 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
+  margin-top: 1.5rem;
   font-weight: 600;
 }
 #sidebar ul { list-style: none; }
 #sidebar ul li a {
   display: block;
-  padding: 0.5rem 1.5rem;
+  padding: 0.4rem 1.5rem;
   color: var(--text);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   transition: background 0.15s;
   border-left: 3px solid transparent;
 }
@@ -70,7 +71,7 @@ body {
   font-size: 1.3rem;
   font-weight: 700;
   padding: 0 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -82,11 +83,8 @@ body {
   margin: 0 auto;
   padding: 3rem 3rem 6rem;
 }
-#main h1 {
-  font-size: 2.5rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
+#main h1 { font-size: 2.5rem; font-weight: 600; margin-bottom: 0.25rem; }
+#main .subtitle { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 2rem; }
 #main h2 {
   font-size: 1.5rem;
   font-weight: 500;
@@ -95,15 +93,11 @@ body {
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--border);
 }
-#main h3 {
-  font-size: 1.15rem;
-  font-weight: 500;
-  margin-top: 2rem;
-  margin-bottom: 0.75rem;
-}
+#main h3 { font-size: 1.15rem; font-weight: 500; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+#main h4 { font-size: 1rem; font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem; color: var(--accent); }
 #main p { margin-bottom: 1rem; color: var(--text-secondary); }
 #main ul { margin: 0 0 1.5rem 1.5rem; }
-#main ul li { margin-bottom: 0.5rem; color: var(--text-secondary); }
+#main ul li { margin-bottom: 0.4rem; color: var(--text-secondary); }
 #main ul li strong { color: var(--text); }
 #main a { color: var(--link); text-decoration: none; }
 #main a:hover { text-decoration: underline; }
@@ -111,11 +105,11 @@ body {
   display: inline-block;
   background: var(--accent);
   color: #fff;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  padding: 0.2rem 0.6rem;
+  padding: 0.15rem 0.5rem;
   border-radius: 4px;
-  margin-right: 0.4rem;
+  margin-right: 0.3rem;
   vertical-align: middle;
 }
 code {
@@ -135,49 +129,28 @@ pre {
   margin-bottom: 1.5rem;
 }
 pre code { background: none; padding: 0; font-size: 0.85rem; line-height: 1.5; }
-.version-header { margin-bottom: 2rem; }
-.version-header .tag {
-  font-size: 0.85rem;
-  color: var(--accent);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.version-header h1 { margin-top: 0.25rem; }
-.version-header .date {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  margin-top: 0.25rem;
-}
-.play-btn {
-  display: inline-block;
-  background: var(--accent);
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 600;
-  padding: 0.75rem 1.5rem;
-  border-radius: 6px;
-  text-decoration: none;
-  margin-bottom: 2rem;
-  transition: background 0.15s;
-}
-.play-btn:hover { background: #4a9ae8; text-decoration: none; }
 .feature {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 .feature h3 { margin-top: 0; }
 .feature p:last-child { margin-bottom: 0; }
-.other-vers { margin-top: 3rem; padding: 1.5rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; }
-.other-vers h3 { margin-bottom: 0.5rem; }
-.other-vers a { color: var(--accent); }
+.feature ul { margin-bottom: 0; }
+.toc { margin-bottom: 2rem; padding: 1.5rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; }
+.toc h3 { margin-top: 0; margin-bottom: 0.5rem; }
+.toc a { display: block; padding: 0.2rem 0; font-size: 0.9rem; }
+.toc a.sub { padding-left: 1.5rem; font-size: 0.85rem; color: var(--text-secondary); }
 #sidebar::-webkit-scrollbar { width: 6px; }
 #sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 pre::-webkit-scrollbar { height: 6px; }
 pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+th, td { padding: 0.5rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+th { color: var(--accent); font-weight: 600; }
+td { color: var(--text-secondary); }
 @media (max-width: 800px) {
   #sidebar { display: none; }
   #main { padding: 2rem 1.5rem 6rem; }
@@ -187,95 +160,158 @@ pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 </head>
 <body>
 <div id="wrapper">
-    <nav id="sidebar">
+  <nav id="sidebar">
     <div class="logo">λ <span>Cognit</span></div>
     <h2>Links</h2>
     <ul>
       <li><a href="play.html">▶ Playground</a></li>
     </ul>
-    <h2 style="margin-top:1.5rem">Release</h2>
+    <h2>On this page</h2>
     <ul>
-      <li><a href="index.html" class="active">v0.0.1</a></li>
+      <li><a href="#compiler">Compiler</a></li>
+      <li><a href="#language">Language</a></li>
+      <li><a href="#runtime">Runtime</a></li>
+      <li><a href="#cli">CLI</a></li>
+      <li><a href="#web">Web Pages</a></li>
+      <li><a href="#examples">Examples</a></li>
+      <li><a href="#tooling">Tooling</a></li>
+      <li><a href="#fixes">Fixes</a></li>
     </ul>
   </nav>
 
   <main id="main">
-      <div class="version-header">
-        <div class="tag">Current Release</div>
-        <h1>Version 0.0.1</h1>
-        <div class="date">17 June 2026</div>
-      </div>
+    <div style="margin-bottom:0.5rem; font-size:0.85rem; color:var(--accent); font-weight:600; text-transform:uppercase; letter-spacing:0.05em;">Current Release</div>
+    <h1>Version 0.0.1</h1>
+    <div class="subtitle">17 June 2026 — Everything built in the Cognit project so far.</div>
 
-      <p>
-        Cognit 0.0.1 is the initial release — a general-purpose programming language
-        designed for the future of AI and robotics, compiling to JavaScript.
-      </p>
+    <div class="toc">
+      <h3>Summary</h3>
+      <p>Cognit is a general-purpose programming language designed for AI and robotics, compiling to JavaScript. The entire project — compiler, runtime, CLI, playground, and tooling — was built from scratch.</p>
+    </div>
 
-      <a href="play.html" class="play-btn">▶ Try it in the Playground</a>
-
-      <h2>Language Features</h2>
+    <!-- ==================== COMPILER ==================== -->
+    <section id="compiler">
+      <h2>1. Compiler</h2>
+      <p>Three-phase pipeline: <strong>Lexer → Parser → Generator</strong>. Pure JavaScript, zero dependencies.</p>
 
       <div class="feature">
-        <h3>Functional Pipes <span class="badge">new</span></h3>
-        <p>Chain operations with the <code>|></code> pipe operator. The piped value is passed as the first argument.</p>
-        <pre><code>let result = numbers
+        <h3>Lexer</h3>
+        <p>Tokenizes Cognit source code into a stream of tokens with full position tracking.</p>
+        <ul>
+          <li><strong>Line / Column tracking</strong> — every token records its source position for precise error messages</li>
+          <li><strong>Indent tracking</strong> — measures leading whitespace to emit <code>Indent</code>/<code>Dedent</code> tokens for block structure</li>
+          <li><strong>Brace depth</strong> — when inside <code>{ }</code>, indent tracking is disabled (braces manage nesting)</li>
+          <li><strong>String interpolation detection</strong> — scans for <code>{expr}</code> inside double-quoted strings, splits into parts and sub-expressions</li>
+          <li><strong>Operators</strong> — <code>**</code> (exponentiation) and <code>@</code> (matrix multiply) tokenized as <code>Op</code></li>
+          <li><strong>Keywords</strong> — <code>let</code>, <code>var</code>, <code>fn</code>, <code>match</code>, <code>if</code>, <code>else</code>, <code>for</code>, <code>while</code>, <code>return</code>, <code>import</code>, <code>agent</code>, <code>pub</code>, <code>and</code>, <code>or</code>, <code>not</code>, <code>true</code>, <code>false</code>, <code>Some</code>, <code>None</code>, <code>Ok</code>, <code>Err</code>, <code>async</code>, <code>await</code>, <code>type</code></li>
+          <li><strong>Comment skipping</strong> — <code>#</code> to end-of-line</li>
+          <li><strong>Error reporting</strong> — throws <code>LexError at line:col: message</code> for invalid tokens, unterminated strings, indentation mismatches</li>
+        </ul>
+      </div>
+
+      <div class="feature">
+        <h3>Parser</h3>
+        <p>Recursive descent parser with precedence climbing for expressions.</p>
+        <ul>
+          <li><strong>Program</strong> — sequence of statements separated by newlines</li>
+          <li><strong>Bindings</strong> — <code>let</code> (compile to JS <code>let</code>, reassignable) and <code>var</code> (JS <code>var</code>)</li>
+          <li><strong>Functions</strong> — <code>fn name(params) -> expr</code> or <code>fn name(params) { body }</code>; anonymous <code>fn(params) -> expr</code></li>
+          <li><strong>Pattern matching</strong> — <code>match expr { pattern -> body ... }</code> with literal, wildcard (<code>_</code>), binding, None/Some, Ok/Err, and tuple patterns</li>
+          <li><strong>Expression-oriented if</strong> — <code>if cond -> expr else if cond -> expr else -> expr</code> compiles to ternary or IIFE</li>
+          <li><strong>Pipe operator</strong> — <code>a |> f(b)</code> desugars to <code>f(a, b)</code>; supports multi-line chains</li>
+          <li><strong>Agent blocks</strong> — <code>agent { key = value ... }</code> parses as <code>Agent</code> AST node</li>
+          <li><strong>Dict / Block disambiguation</strong> — <code>{ key: value }</code> is a dict, <code>{ stmt; stmt }</code> is a brace block</li>
+          <li><strong>For / While</strong> — <code>for x in iterable { body }</code>, <code>while cond { body }</code></li>
+          <li><strong>Import</strong> — <code>import "module" : name1, name2</code></li>
+          <li><strong>Type annotations</strong> — optional <code>: Type</code> on params and return values</li>
+          <li><strong>Semicolons</strong> — accepted as statement separators</li>
+          <li><strong>Error reporting</strong> — <code>ParseError at line:col: Expected X, got Y</code></li>
+        </ul>
+      </div>
+
+      <div class="feature">
+        <h3>Generator</h3>
+        <p>Transpiles the AST to valid JavaScript, injects runtime functions via <code>new Function(...keys, js)</code>.</p>
+        <ul>
+          <li><strong>Let bindings</strong> → <code>let x = value;</code></li>
+          <li><strong>Functions</strong> → <code>function name(params) { return expr; }</code></li>
+          <li><strong>Pipes</strong> → <code>fn(piped, arg1, arg2)</code> (piped value as first argument)</li>
+          <li><strong>Match</strong> → IIFE with <code>if/else if</code> chain comparing against <code>__match_val__</code></li>
+          <li><strong>If/else</strong> → ternary for simple cases, IIFE for complex chains</li>
+          <li><strong>String interpolation</strong> → concatenation with <code>String()</code> for embedded expressions</li>
+          <li><strong>Agent</strong> → <code>__cognit_agent__({ ... })</code> call</li>
+          <li><strong>Logical operators</strong> — <code>or</code> → <code>||</code>, <code>and</code> → <code>&&</code></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== LANGUAGE ==================== -->
+    <section id="language">
+      <h2>2. Language</h2>
+
+      <div class="feature">
+        <h3>Syntax Overview</h3>
+        <pre><code>// Bindings
+let x = 42
+var mutable = "hello"
+
+// Functions
+fn add(a, b) -> a + b
+let double = fn(x) -> x * 2
+
+// Pipes
+let result = range(1, 10)
     |> filter(fn(x) -> x % 2 == 0)
     |> map(fn(x) -> x * x)
-    |> reduce(fn(acc, x) -> acc + x, 0)</code></pre>
-      </div>
+    |> sum
 
-      <div class="feature">
-        <h3>Pattern Matching <span class="badge">new</span></h3>
-        <p>Express complex branching with <code>match</code> and pattern cases.</p>
-        <pre><code>fn describe(n) {
-    match n {
-        0 -> "zero"
-        1 -> "one"
-        _ -> "many"
-    }
-}</code></pre>
-      </div>
+// Pattern matching
+match value {
+    0 -> "zero"
+    1 -> "one"
+    _ -> "many"
+}
 
-      <div class="feature">
-        <h3>String Interpolation <span class="badge">new</span></h3>
-        <p>Embed expressions directly in strings with <code>{expr}</code> syntax.</p>
-        <pre><code>let name = "Cognit"
-print("Hello, {name}!")  // Hello, Cognit!</code></pre>
-      </div>
-
-      <div class="feature">
-        <h3>Expression-oriented If <span class="badge">new</span></h3>
-        <p>Every <code>if</code> expression returns a value — no ternary operator needed.</p>
-        <pre><code>let grade = if score >= 90 -> "A"
+// Expression if
+let grade = if score >= 90 -> "A"
             else if score >= 80 -> "B"
-            else -> "F"</code></pre>
+            else -> "F"
+
+// String interpolation
+print("Hello, {name}! You are {age}.")
+
+// Lists and dicts
+let list = [1, 2, 3]
+let dict = {"key": "value", "count": 10}
+
+// Loops
+for i in range(0, 5) { print(i) }
+while x > 0 { x = x - 1 }
+
+// Operators
+let exp = 2 ** 10       // exponentiation
+let mm = a @ b          // matrix multiply
+let eq = x == y         // comparison
+let logical = a and b   // logical and/or/not</code></pre>
       </div>
 
       <div class="feature">
-        <h3>Exponentiation &amp; Matrix Multiply <span class="badge">new</span></h3>
-        <p>Two new operators: <code>**</code> for exponentiation and <code>@</code> for matrix multiplication.</p>
-        <pre><code>let x = 2 ** 10   // 1024
-let y = a @ b     // matrix multiply</code></pre>
-      </div>
-
-      <h2>Tensor &amp; AI</h2>
-
-      <div class="feature">
-        <h3>Tensor Operations <span class="badge">new</span></h3>
-        <p>First-class tensor type with arithmetic, matrix multiplication, and shape manipulation.</p>
-        <pre><code>let a = vec(1, 2, 3)
-let b = vec(4, 5, 6)
-print(a.add(b).data)    // [5, 7, 9]
-print(a.matmul(b).data) // 32
-
-let m = mat([[1, 2], [3, 4]])
-print(eye(3).data)      // identity matrix
-print(zeros(2, 3))      // zero matrix</code></pre>
+        <h3>Comments</h3>
+        <p>Single-line only: <code># this is a comment</code></p>
       </div>
 
       <div class="feature">
-        <h3>Agent Syntax <span class="badge">new</span></h3>
-        <p>Declarative agent configuration blocks for LLM integration.</p>
+        <h3>Block Structure</h3>
+        <p>Cognit supports two styles:</p>
+        <ul>
+          <li><strong>Indentation-based</strong> — like Python, uses <code>Indent</code>/<code>Dedent</code> tokens</li>
+          <li><strong>Brace-based</strong> — <code>{ }</code> blocks disable indent tracking</li>
+        </ul>
+      </div>
+
+      <div class="feature">
+        <h3>Agent Syntax</h3>
+        <p>First-class syntactic construct for LLM agent configuration:</p>
         <pre><code>let assistant = agent {
     model = "gpt-4"
     temperature = 0.7
@@ -283,40 +319,327 @@ print(zeros(2, 3))      // zero matrix</code></pre>
 }</code></pre>
       </div>
 
-      <h2>Runtime</h2>
+      <div class="feature">
+        <h3>Tensor Literals</h3>
+        <p>Built-in functions create tensor objects:</p>
+        <pre><code>let v = vec(1, 2, 3)           // 1D vector
+let m = mat([[1,2],[3,4]])      // 2D matrix
+let i = eye(3)                  // identity matrix
+let z = zeros(2, 3)             // zero matrix
+let o = ones(3)                 // ones vector</code></pre>
+      </div>
+    </section>
+
+    <!-- ==================== RUNTIME ==================== -->
+    <section id="runtime">
+      <h2>3. Runtime</h2>
+      <p>All runtime functions are injected into the generated JavaScript. No imports needed.</p>
 
       <div class="feature">
-        <h3>Collection Utilities <span class="badge">new</span></h3>
-        <p>Built-in <code>map</code>, <code>filter</code>, <code>reduce</code>, <code>range</code>, <code>sort</code>, <code>reverse</code>, <code>chunk</code>, <code>unique</code>, <code>zip</code>, <code>flatten</code>, <code>group_by</code>, and more.</p>
+        <h3>IO &amp; Utilities</h3>
+        <table>
+          <tr><th>Function</th><th>Description</th></tr>
+          <tr><td><code>print(...)</code></td><td>Print values to console</td></tr>
+          <tr><td><code>sleep(ms)</code></td><td>Async sleep (returns Promise)</td></tr>
+        </table>
       </div>
 
       <div class="feature">
-        <h3>JSON Support <span class="badge">new</span></h3>
-        <p>Parse and stringify JSON with <code>json_parse</code> and <code>json_stringify</code>.</p>
+        <h3>Collections</h3>
+        <table>
+          <tr><th>Function</th><th>Description</th></tr>
+          <tr><td><code>map(arr, fn)</code></td><td>Transform each element</td></tr>
+          <tr><td><code>filter(arr, fn)</code></td><td>Keep elements matching predicate</td></tr>
+          <tr><td><code>reduce(arr, fn, init)</code></td><td>Accumulate over array</td></tr>
+          <tr><td><code>range(start, end, step?)</code></td><td>Generate numeric range</td></tr>
+          <tr><td><code>len(arr)</code></td><td>Array length</td></tr>
+          <tr><td><code>sum(arr)</code></td><td>Sum of numbers</td></tr>
+          <tr><td><code>first / last(arr)</code></td><td>First / last element</td></tr>
+          <tr><td><code>take / drop(arr, n)</code></td><td>Take or drop first n elements</td></tr>
+          <tr><td><code>sort(arr, fn?)</code></td><td>Sorted copy</td></tr>
+          <tr><td><code>reverse(arr)</code></td><td>Reversed copy</td></tr>
+          <tr><td><code>chunk(arr, size)</code></td><td>Split into chunks</td></tr>
+          <tr><td><code>unique(arr)</code></td><td>Remove duplicates</td></tr>
+          <tr><td><code>zip(...arrays)</code></td><td>Zip arrays together</td></tr>
+          <tr><td><code>flatten(arr)</code></td><td>Flatten nested arrays</td></tr>
+          <tr><td><code>group_by(arr, fn)</code></td><td>Group by key function</td></tr>
+        </table>
       </div>
 
       <div class="feature">
-        <h3>Math Functions <span class="badge">new</span></h3>
-        <p><code>cos</code>, <code>sin</code>, <code>sqrt</code>, <code>exp</code> built into the runtime.</p>
-      </div>
-
-      <h2>Tooling</h2>
-
-      <div class="feature">
-        <h3>REPL <span class="badge">new</span></h3>
-        <p>Run <code>cognit</code> without arguments to start an interactive REPL with <code>.exit</code> to quit.</p>
-      </div>
-
-      <div class="feature">
-        <h3>Error Messages <span class="badge">improved</span></h3>
-        <p>Compile and parse errors now show the exact source line with a <code>^</code> caret pointing to the problem.</p>
+        <h3>Math</h3>
+        <table>
+          <tr><th>Function</th><th>Description</th></tr>
+          <tr><td><code>cos(x)</code></td><td>Cosine</td></tr>
+          <tr><td><code>sin(x)</code></td><td>Sine</td></tr>
+          <tr><td><code>sqrt(x)</code></td><td>Square root</td></tr>
+          <tr><td><code>exp(x)</code></td><td>Exponential</td></tr>
+        </table>
       </div>
 
       <div class="feature">
-        <h3>Playground <span class="badge">new</span></h3>
-        <p>Try Cognit in your browser with syntax highlighting, live compilation, and example selector.</p>
+        <h3>Tensor Class</h3>
+        <p>Full tensor arithmetic and linear algebra operations.</p>
+        <table>
+          <tr><th>Method</th><th>Description</th></tr>
+          <tr><td><code>.add / .sub / .mul / .div(other)</code></td><td>Element-wise arithmetic</td></tr>
+          <tr><td><code>.matmul(other)</code></td><td>Matrix multiplication</td></tr>
+          <tr><td><code>.transpose()</code></td><td>Matrix transpose</td></tr>
+          <tr><td><code>.dot(other)</code></td><td>Dot product</td></tr>
+          <tr><td><code>.sum() / .mean()</code></td><td>Reduce all elements</td></tr>
+          <tr><td><code>.reshape(...shape)</code></td><td>Reshape tensor</td></tr>
+          <tr><td><code>.flatten()</code></td><td>Flatten to 1D</td></tr>
+          <tr><td><code>.map(fn)</code></td><td>Element-wise transform</td></tr>
+          <tr><td><code>.get(row, col?)</code></td><td>Access element</td></tr>
+          <tr><td><code>.data</code></td><td>Raw nested array</td></tr>
+          <tr><td><code>.shape</code></td><td>Dimensions array</td></tr>
+        </table>
       </div>
 
+      <div class="feature">
+        <h3>JSON</h3>
+        <table>
+          <tr><th>Function</th><th>Description</th></tr>
+          <tr><td><code>json_parse(str)</code></td><td>Parse JSON string</td></tr>
+          <tr><td><code>json_stringify(obj, pretty?)</code></td><td>Serialize to JSON</td></tr>
+        </table>
+      </div>
+
+      <div class="feature">
+        <h3>Agent System</h3>
+        <table>
+          <tr><th>Function</th><th>Description</th></tr>
+          <tr><td><code>__cognit_agent__(config)</code></td><td>Creates agent object</td></tr>
+          <tr><td><code>agent_run(agent, input)</code></td><td>Runs agent with input (mock by default)</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- ==================== CLI ==================== -->
+    <section id="cli">
+      <h2>4. CLI</h2>
+
+      <div class="feature">
+        <h3>Commands</h3>
+        <table>
+          <tr><th>Command</th><th>Description</th></tr>
+          <tr><td><code>cognit</code></td><td>Start interactive REPL</td></tr>
+          <tr><td><code>cognit &lt;file&gt;</code></td><td>Run a .cgn file</td></tr>
+          <tr><td><code>cognit run &lt;file&gt;</code></td><td>Run a .cgn file</td></tr>
+          <tr><td><code>cognit build &lt;file&gt;</code></td><td>Compile .cgn to .js</td></tr>
+          <tr><td><code>cognit build</code></td><td>Compile all .cgn files in directory</td></tr>
+        </table>
+      </div>
+
+      <div class="feature">
+        <h3>Error Formatting</h3>
+        <p>Compile and parse errors display the exact source line with a caret pointer:</p>
+        <pre><code>  examples/broken.cgn:5:3
+    let x = 
+      ^
+  ParseError: Unexpected token '4'</code></pre>
+      </div>
+
+      <div class="feature">
+        <h3>REPL</h3>
+        <p>Run <code>cognit</code> with no arguments. Type expressions line by line. <code>.exit</code> to quit.</p>
+      </div>
+    </section>
+
+    <!-- ==================== WEB PAGES ==================== -->
+    <section id="web">
+      <h2>5. Web Pages</h2>
+
+      <div class="feature">
+        <h3>Release Notes Page</h3>
+        <p>Dark-themed homepage styled after TypeScript's release notes. Includes sidebar navigation, feature cards, code blocks with syntax highlighting.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Playground</h3>
+        <p>Full browser-based IDE for Cognit at <code>play.html</code>. Features:</p>
+        <ul>
+          <li><strong>Code editor</strong> — textarea with monospace font, dark theme</li>
+          <li><strong>Synchronized gutter</strong> — line numbers scroll in perfect sync with the editor</li>
+          <li><strong>Live compilation</strong> — auto-compiles on every keystroke, shows generated JavaScript</li>
+          <li><strong>Run button</strong> — executes code and shows output in a dedicated tab</li>
+          <li><strong>Error handling</strong> — compile errors in Errors tab, runtime errors in Output tab</li>
+          <li><strong>Example selector</strong> — dropdown loads pre-written Cognit examples</li>
+          <li><strong>Full compiler inline</strong> — the entire Lexer, Parser, and Generator are bundled as inline JavaScript</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== EXAMPLES ==================== -->
+    <section id="examples">
+      <h2>6. Examples</h2>
+
+      <div class="feature">
+        <h3>hello.cgn</h3>
+        <p>Hello World, factorial, pipes, pattern matching, grade calculator:</p>
+        <pre><code>print("Hello, World!")
+print("2 + 2 =", 2 + 2)
+
+fn factorial(n) {
+    if n <= 1 -> 1
+    else -> n * factorial(n - 1)
+}
+print("factorial(5) =", factorial(5))
+
+let numbers = range(1, 21)
+let doubled = numbers |> map(fn(x) -> x * 2)
+let evens = numbers |> filter(fn(x) -> x % 2 == 0)
+
+fn describe(n) {
+    match n {
+        0 -> "zero"
+        1 -> "one"
+        2 -> "two"
+        _ -> "many"
+    }
+}
+
+fn letter_grade(score) {
+    match score {
+        s if s >= 90 -> "A"
+        s if s >= 80 -> "B"
+        s if s >= 70 -> "C"
+        s if s >= 60 -> "D"
+        _ -> "F"
+    }
+}</code></pre>
+      </div>
+
+      <div class="feature">
+        <h3>advanced.cgn</h3>
+        <p>Complex pipelines, pattern matching with guards, fibonacci, fizzbuzz, dict operations.</p>
+      </div>
+
+      <div class="feature">
+        <h3>neural_net.cgn</h3>
+        <p>Forward pass of a 2-layer neural network using tensor operations:</p>
+        <ul>
+          <li>Sigmoid activation function</li>
+          <li>Matrix multiplication for weights</li>
+          <li>Batch processing (2 samples, 4 features → 3 hidden → 2 outputs)</li>
+          <li>Mean squared error loss calculation</li>
+        </ul>
+      </div>
+
+      <div class="feature">
+        <h3>robotics.cgn</h3>
+        <p>Path planning and kinematics for robotics:</p>
+        <ul>
+          <li>Waypoint distance calculation with pipes</li>
+          <li>Obstacle collision detection</li>
+          <li>Forward kinematics for a 2-link arm</li>
+        </ul>
+      </div>
+
+      <div class="feature">
+        <h3>sentiment_agent.cgn</h3>
+        <p>AI agent pipeline for sentiment analysis:</p>
+        <ul>
+          <li>Agent configuration blocks</li>
+          <li>Batch review processing</li>
+          <li>JSON export of results</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==================== TOOLING ==================== -->
+    <section id="tooling">
+      <h2>7. Tooling</h2>
+
+      <div class="feature">
+        <h3>VS Code Extension</h3>
+        <p>Located at <code>vscode-cognit/</code>. Provides syntax highlighting for <code>.cgn</code> files with TextMate grammar covering:</p>
+        <ul>
+          <li>Keywords, operators, built-in functions</li>
+          <li>String interpolation highlighting</li>
+          <li>Comments, numbers, strings</li>
+          <li>Language configuration (brackets, auto-closing pairs)</li>
+        </ul>
+      </div>
+
+      <div class="feature">
+        <h3>Test Suite</h3>
+        <p>Located at <code>tests/run.js</code>. 21 tests covering:</p>
+        <ul>
+          <li>Core language: hello world, let binding, functions, string interpolation</li>
+          <li>Pipes, pattern matching, if/else, for loops</li>
+          <li>Semicolons, exponentiation</li>
+          <li>Tensor operations: vec add, matrix multiply, identity, sum</li>
+          <li>Collections: sort, reverse, chunk, unique</li>
+          <li>Agent syntax, JSON stringify</li>
+        </ul>
+        <p>Run with: <code>node tests/run.js</code></p>
+      </div>
+
+      <div class="feature">
+        <h3>CI / CD</h3>
+        <ul>
+          <li><strong>GitHub Actions CI</strong> — runs tests on every push/PR to main</li>
+          <li><strong>GitHub Pages deploy</strong> — auto-deploys <code>docs/</code> folder on push to main</li>
+        </ul>
+      </div>
+
+      <div class="feature">
+        <h3>npm Package</h3>
+        <p>Package name: <code>cognit</code>. Published with <code>npm publish</code>.</p>
+        <ul>
+          <li>Bin: <code>cognit</code> → <code>src/cli/index.js</code></li>
+          <li>Files: <code>src/</code>, <code>examples/</code>, <code>README.md</code>, <code>LICENSE</code></li>
+        </ul>
+      </div>
+
+      <div class="feature">
+        <h3>Project Structure</h3>
+        <pre><code>cognit/
+├── src/
+│   ├── compiler/
+│   │   ├── lexer.js       # Tokenizer
+│   │   ├── parser.js      # Recursive descent parser
+│   │   └── generator.js   # JS code generator
+│   ├── cli/
+│   │   └── index.js       # CLI + REPL
+│   └── runtime/
+│       └── index.js       # Standard library
+├── docs/
+│   ├── index.html         # Release notes
+│   └── play.html          # Online playground
+├── examples/
+│   ├── hello.cgn
+│   ├── advanced.cgn
+│   ├── neural_net.cgn
+│   ├── robotics.cgn
+│   └── sentiment_agent.cgn
+├── tests/
+│   └── run.js             # Test suite
+├── vscode-cognit/          # VS Code extension
+├── .github/workflows/     # CI + Pages deploy
+├── package.json
+├── README.md
+└── LICENSE</code></pre>
+      </div>
+    </section>
+
+    <!-- ==================== FIXES ==================== -->
+    <section id="fixes">
+      <h2>8. Bugs Fixed</h2>
+
+      <div class="feature">
+        <table>
+          <tr><th>Issue</th><th>Description</th></tr>
+          <tr><td><strong>Unary minus</strong></td><td><code>exp(-x)</code> failed because parser checked <code>isAt("-")</code> but the token type is <code>"Op"</code>. Fixed to check <code>isAt("Op") && value === "-"</code>.</td></tr>
+          <tr><td><strong>Multi-line let bindings</strong></td><td>Values on the next line with indentation (<code>let x =\n    42</code>) failed because parser didn't skip <code>Indent</code> tokens. Added <code>Indent</code> skipping in <code>parseLetBinding</code>/<code>parseVarBinding</code>.</td></tr>
+          <tr><td><strong>or / and operators</strong></td><td>Generator emitted <code>a or b</code> instead of <code>a || b</code>. Added JS operator mapping in <code>genBinaryOp</code>.</td></tr>
+          <tr><td><strong>Arrow + brace block</strong></td><td><code>fn(x) -> { ... }</code> treated the block as an expression, generating empty <code>return;</code>. Added <code>{</code> check in <code>parseBlockOrExpr</code> after arrow.</td></tr>
+          <tr><td><strong>Gutter scroll sync</strong></td><td>Line numbers in playground gutter didn't stay aligned with editor text on scroll. Fixed by adding scroll event listener syncing <code>gutter.scrollTop</code>.</td></tr>
+          <tr><td><strong>Trailing empty line in gutter</strong></td><td>Gutter showed an extra line number for trailing <code>\n</code>. Fixed by excluding the last empty line from count.</td></tr>
+        </table>
+      </div>
+    </section>
 
   </main>
 </div>
