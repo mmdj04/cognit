@@ -84,6 +84,10 @@ body {
   margin: 0 auto;
   padding: 2rem 2rem 6rem;
 }
+#main .header-content {
+  padding: 0 1.5rem;
+  max-width: 800px;
+}
 #main h1 { font-size: 2.5rem; font-weight: 600; margin-bottom: 0.25rem; }
 #main h2 {
   font-size: 1.5rem;
@@ -132,9 +136,15 @@ td { color: var(--text); }
 pre::-webkit-scrollbar { height: 6px; }
 pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 @media (max-width: 800px) {
-  #topbar { flex-wrap: wrap; gap: 0.5rem; }
-  #main { padding: 1.5rem 1rem 6rem; }
+  #topbar { flex-wrap: wrap; gap: 0.5rem; padding: 0.75rem 1rem; }
+  #main { padding: 1rem 0.75rem 4rem; }
   #main h1 { font-size: 1.8rem; }
+  #main .header-content { padding: 0 1rem; }
+  .feature { border-radius: 6px; }
+  .feature section { padding: 1rem; }
+  pre { padding: 0.75rem; }
+  table { font-size: 0.85rem; }
+  th, td { padding: 0.4rem 0.5rem; }
 }
 </style>
 </head>
@@ -151,12 +161,12 @@ pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 </div>
 
 <main id="main">
-  <div style="margin-bottom:2rem;">
-    <div style="font-size:0.85rem; color:var(--accent); font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.25rem;">Current Release</div>
-    <h1>Version 0.0.1</h1>
-    <div style="font-size:1.1rem; margin-bottom:0.5rem;">17 June 2026 — Everything built in the Cognit project so far.</div>
-    <p>Cognit is a general-purpose programming language designed for AI and robotics, compiling to JavaScript. The entire project — compiler, runtime, CLI, playground, LSP server, and tooling — was built from scratch.</p>
-  </div>
+    <div class="header-content">
+      <div style="font-size:0.85rem; color:var(--accent); font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.25rem;">Current Release</div>
+      <h1>Version 0.0.1</h1>
+      <div style="font-size:1.1rem; margin-bottom:0.5rem;">17 June 2026 — Everything built in the Cognit project so far.</div>
+      <p>Cognit is a general-purpose programming language designed for AI and robotics, compiling to JavaScript. The entire project — compiler, runtime, CLI, playground, LSP server, and tooling — was built from scratch.</p>
+    </div>
 
   <div class="feature">
     <section id="compiler">
