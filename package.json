@@ -2,9 +2,13 @@
   "name": "cognit",
   "version": "0.1.0",
   "description": "Cognit programming language - designed for the future of AI and robotics",
-  "main": "src/cli.js",
+  "main": "src/cli/index.js",
   "bin": {
-    "cognit": "./src/cli.js"
+    "cognit": "./src/cli/index.js"
   },
-  "type": "module"
+  "type": "module",
+  "scripts": {
+    "start": "node src/cli/index.js",
+    "test": "node tests/run.js"
+  }
 }

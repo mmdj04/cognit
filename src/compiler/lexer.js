@@ -2,7 +2,7 @@ const Keywords = new Set([
   "let", "var", "fn", "match", "if", "else", "true", "false",
   "return", "import", "for", "in", "while", "and", "or", "not",
   "Some", "None", "Ok", "Err", "async", "await", "type", "pub",
-  "agent", "tensor", "vector",
+  "agent",
 ])
 
 export class Token {
@@ -351,7 +351,7 @@ export class Lexer {
         this.tokens.push(new Token("}", "}", line, col))
         continue
       }
-      if ("()[]:,.".includes(ch)) {
+      if ("()[]:,.;".includes(ch)) {
         this.advance()
         this.tokens.push(new Token(ch, ch, line, col))
         continue

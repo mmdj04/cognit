@@ -239,7 +239,7 @@ const Keywords = new Set([
   "let","var","fn","match","if","else","true","false",
   "return","import","for","in","while","and","or","not",
   "Some","None","Ok","Err","async","await","type","pub",
-  "agent","tensor","vector",
+  "agent",
 ])
 
 class Lexer {
@@ -354,7 +354,7 @@ class Lexer {
       if ("+-*/%".includes(ch)) { this.advance(); this.tokens.push(new Token("Op",ch)); continue; }
       if (ch === "{") { this.advance(); this.braceDepth++; this.tokens.push(new Token("{","{")); continue; }
       if (ch === "}") { this.advance(); this.braceDepth--; this.tokens.push(new Token("}","}")); continue; }
-      if ("()[]:,.".includes(ch)) { this.advance(); this.tokens.push(new Token(ch,ch)); continue; }
+      if ("()[]:,.;".includes(ch)) { this.advance(); this.tokens.push(new Token(ch,ch)); continue; }
       if (ch === "=") { this.advance(); this.tokens.push(new Token("Assign","=")); continue; }
       if (ch === "!") { this.advance(); this.tokens.push(new Token("Not","!")); continue; }
       if (/[0-9]/.test(ch)) { const v = this.readNumber(); this.tokens.push(new Token(Number.isInteger(v)?"Int":"Float",v)); continue; }
@@ -383,10 +383,10 @@ class Parser {
   isAt(type, value) { const t=this.peek(); return t&&t.type===type&&(value===undefined||t.value===value); }
   expect(type, value) { const t=this.peek(); if(!t||t.type!==type||(value!==undefined&&t.value!==value)) this.error(`Expected ${value||type}, got ${t?t.type+"("+t.value+")":"EOF"}`); return this.advance(); }
   advance() { return this.tokens[this.pos++]; }
-  skipNewlines() { while(this.isAt("Newline")) this.advance(); }
+  skipNewlines() { while(this.isAt("Newline")||this.isAt(";")) this.advance(); }
   skipAll() { while(this.isAt("Newline")||this.isAt("Indent")||this.isAt("Dedent")) this.advance(); }
   skipToPipe() { while(this.isAt("Newline")||this.isAt("Indent")) this.advance(); }
-  atEnd() { return this.isAt("Newline")||this.isAt("Dedent")||this.isAt("EOF")||this.isAt(")"); }
+  atEnd() { return this.isAt("Newline")||this.isAt("Dedent")||this.isAt("EOF")||this.isAt(")")||this.isAt(";"); }
 
   parseProgram() {
     const nodes=[]; this.skipNewlines();

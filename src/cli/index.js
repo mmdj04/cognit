@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 import { readFileSync, writeFileSync, readdirSync } from "fs"
-import { Lexer } from "./lexer.js"
-import { Parser } from "./parser.js"
-import { Generator } from "./generator.js"
-import * as runtime from "./runtime.js"
+import { Lexer } from "../compiler/lexer.js"
+import { Parser } from "../compiler/parser.js"
+import { Generator } from "../compiler/generator.js"
+import * as runtime from "../runtime/index.js"
 
 function compile(source, filename = "<input>") {
   const lexer = new Lexer(source)

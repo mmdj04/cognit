@@ -43,7 +43,7 @@ export class Parser {
   }
 
   skipNewlines() {
-    while (this.isAt("Newline")) {
+    while (this.isAt("Newline") || this.isAt(";")) {
       this.advance()
     }
   }
@@ -62,7 +62,7 @@ export class Parser {
 
   // Check if we're at end of statement (Newline, Dedent, EOF)
   atEndOfStatement() {
-    return this.isAt("Newline") || this.isAt("Dedent") || this.isAt("EOF") || this.isAt(")")
+    return this.isAt("Newline") || this.isAt("Dedent") || this.isAt("EOF") || this.isAt(")") || this.isAt(";")
   }
 
   parseProgram() {
