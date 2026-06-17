@@ -288,7 +288,8 @@ export class Generator {
   genBinaryOp(node, depth) {
     const left = this.gen(node.left, depth)
     const right = this.gen(node.right, depth)
-    return `(${left} ${node.op} ${right})`
+    const jsOp = ({ or: "||", and: "&&" })[node.op] || node.op
+    return `(${left} ${jsOp} ${right})`
   }
 
   genAssign(node, depth) {

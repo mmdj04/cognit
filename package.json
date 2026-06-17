@@ -4,7 +4,7 @@
   "description": "Cognit programming language - designed for the future of AI and robotics",
   "main": "src/cli/index.js",
   "bin": {
-    "cognit": "./src/cli/index.js"
+    "cognit": "src/cli/index.js"
   },
   "type": "module",
   "files": [

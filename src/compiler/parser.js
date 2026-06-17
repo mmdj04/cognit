@@ -400,6 +400,9 @@ export class Parser {
     }
     if (this.isAt("Arrow")) {
       this.advance()
+      if (this.isAt("{")) {
+        return this.parseBraceBlock()
+      }
       const expr = this.parseExpression()
       return new ASTNode("Block", { nodes: [new ASTNode("ExprStmt", { expr })], singleExpr: true })
     }
