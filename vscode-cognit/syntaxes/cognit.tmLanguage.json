@@ -66,7 +66,7 @@
     },
     "builtins": {
       "patterns": [{
-        "match": "\\b(print|map|filter|reduce|range|len|sum|first|last|take|drop|sleep|tensor|vec|mat|eye|zeros|ones|json_parse|json_stringify|sort|reverse|chunk|unique|zip|flatten|group_by|agent_run)\\b",
+        "match": "\\b(print|map|filter|reduce|range|len|sum|first|last|take|drop|sleep|tensor|vec|mat|eye|zeros|ones|json_parse|json_stringify|sort|reverse|chunk|unique|zip|flatten|group_by|agent_run|cos|sin|sqrt|exp)\\b",
         "name": "support.function.builtin.cognit"
       }]
     }

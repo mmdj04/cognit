@@ -293,3 +293,10 @@ export function group_by(arr, fn) {
   }
   return result
 }
+
+// === Math Utilities ===
+
+export let cos = Math.cos
+export let sin = Math.sin
+export let sqrt = Math.sqrt
+export let exp = Math.exp

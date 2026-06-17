@@ -7,6 +7,27 @@
     "cognit": "./src/cli/index.js"
   },
   "type": "module",
+  "files": [
+    "src/",
+    "examples/",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "cognit",
+    "programming-language",
+    "compiler",
+    "ai",
+    "robotics",
+    "tensor",
+    "language"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmdj04/cognit.git"
+  },
+  "homepage": "https://mmdj04.github.io/cognit/play.html",
+  "license": "MIT",
   "scripts": {
     "start": "node src/cli/index.js",
     "test": "node tests/run.js"

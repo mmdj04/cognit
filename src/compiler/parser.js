@@ -120,6 +120,7 @@ export class Parser {
       typeAnnot = this.parseType()
     }
     this.expect("Assign")
+    while (this.isAt("Newline") || this.isAt("Indent")) this.advance()
     const value = this.parseExpression()
     return new ASTNode("LetBinding", { name, typeAnnot, value })
   }
@@ -133,6 +134,7 @@ export class Parser {
       typeAnnot = this.parseType()
     }
     this.expect("Assign")
+    while (this.isAt("Newline") || this.isAt("Indent")) this.advance()
     const value = this.parseExpression()
     return new ASTNode("VarBinding", { name, typeAnnot, value })
   }
@@ -433,6 +435,7 @@ export class Parser {
 
   // Expression parsing with precedence climbing
   parseExpression(allowStatement = false) {
+    while (this.isAt("Newline") || this.isAt("Indent")) this.advance()
     let expr = this.parsePrimary()
     if (!expr) return null
 
@@ -625,7 +628,7 @@ export class Parser {
       return this.parseDictOrBraceBlock()
     }
 
-    if (this.isAt("-") || this.isAt("Not") || this.isAt("!")) {
+    if ((this.isAt("Op") && this.peek().value === "-") || this.isAt("Not") || this.isAt("!")) {
       const tok = this.advance()
       const operand = this.parsePrimary()
       return new ASTNode("UnaryOp", { op: tok.value === "not" ? "!" : tok.value, operand })

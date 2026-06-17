@@ -1,0 +1,49 @@
+# Robotics: Sensor Fusion & Path Planning
+# Demonstrates pipes, tensors, and data transforms for robotics
+
+# --- Known waypoints (GPS coordinates) ---
+let waypoints = [
+    [0.0, 0.0],
+    [1.0, 2.0],
+    [3.0, 1.0],
+    [4.0, 5.0]
+]
+
+let dist = fn(a, b) ->
+    sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)
+
+# Compute distances between consecutive waypoints
+let segment_lengths =
+    range(0, len(waypoints) - 1)
+        |> map(fn(i) -> dist(waypoints[i], waypoints[i + 1]))
+
+print("Path segment lengths:", segment_lengths)
+print("Total path length:", sum(segment_lengths))
+
+# --- Obstacle bounding boxes ---
+let obstacles = [
+    {"x": 1.5, "y": 0.5, "radius": 0.3},
+    {"x": 2.5, "y": 2.0, "radius": 0.4}
+]
+
+let is_collision = fn(point, obstacle) ->
+    dist(point, [obstacle.x, obstacle.y]) < obstacle.radius
+
+let check_path = fn(wp) ->
+    obstacles
+        |> map(fn(o) -> is_collision(wp, o))
+        |> reduce(fn(a, b) -> a or b, false)
+
+let collisions = waypoints |> map(fn(wp) -> check_path(wp))
+print("Collision flags:", collisions)
+
+# --- Forward kinematics for a 2-link arm ---
+let forward_kinematics = fn(theta1, theta2, l1, l2) -> {
+    let x = l1 * cos(theta1) + l2 * cos(theta1 + theta2)
+    let y = l1 * sin(theta1) + l2 * sin(theta1 + theta2)
+    return [x, y]
+}
+
+print("\nArm endpoint at (30°, 45°):")
+let result = forward_kinematics(0.52, 0.79, 2.0, 1.5)
+print("x =", result[0], "y =", result[1])

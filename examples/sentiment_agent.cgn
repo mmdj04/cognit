@@ -1,0 +1,49 @@
+# AI Pipeline: Sentiment Analysis with Agents
+# Demonstrates agents, pipes, and data transforms
+
+let analyzer = agent {
+    model = "gpt-4"
+    temperature = 0.3
+    instructions = "Classify sentiment as positive, negative, or neutral"
+}
+
+let summarizer = agent {
+    model = "gpt-4"
+    temperature = 0.5
+    instructions = "Summarize the text in one sentence"
+}
+
+# --- Pipeline ---
+let analyze_review = fn(review) ->
+    review
+        |> agent_run(analyzer)
+        |> fn(r) -> r.content
+        |> print
+
+let summarize_review = fn(review) ->
+    review
+        |> agent_run(summarizer)
+        |> fn(r) -> r.summary
+
+# --- Batch processing ---
+let reviews = [
+    "The product works great and exceeded my expectations",
+    "Terrible customer support, very disappointed",
+    "It's okay, nothing special but does the job"
+]
+
+print("Analyzing reviews...")
+for review in reviews {
+    analyze_review(review)
+}
+
+# --- Data export ---
+let results = reviews
+    |> map(fn(r) -> agent_run(analyzer, r))
+    |> map(fn(r) -> {
+        "text": r.content,
+        "timestamp": "2026-01-15T10:30:00Z"
+    })
+
+print("\nResults as JSON:")
+print(json_stringify(results, true))

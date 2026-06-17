@@ -1,0 +1,41 @@
+# Tensor Neural Network — Forward Pass
+# Demonstrates Cognit's tensor operations for ML
+
+let sigmoid = fn(x) -> 1 / (1 + exp(-x))
+
+let layer = fn(input, weights, bias) ->
+    input.matmul(weights).add(bias).map(sigmoid)
+
+# Input: 4 features, batch of 2
+let X = mat([[0.1, 0.2, 0.3, 0.4],
+             [0.5, 0.6, 0.7, 0.8]])
+
+# Layer 1: 4 inputs → 3 neurons
+let W1 = mat([[0.1, 0.2, 0.3],
+              [0.4, 0.5, 0.6],
+              [0.7, 0.8, 0.9],
+              [0.2, 0.3, 0.4]])
+
+let b1 = vec(0.01, 0.02, 0.03)
+
+let h1 = layer(X, W1, b1)
+print("Hidden layer output:")
+print(h1.data)
+
+# Layer 2: 3 inputs → 2 outputs
+let W2 = mat([[0.5, 0.6],
+              [0.7, 0.8],
+              [0.9, 0.1]])
+
+let b2 = vec(0.01, 0.02)
+
+let output = layer(h1, W2, b2)
+print("\nFinal output:")
+print(output.data)
+
+# Loss: mean squared error vs target
+let target = mat([[1.0, 0.0],
+                  [0.0, 1.0]])
+
+let loss = output.sub(target).map(fn(x) -> x ** 2).sum() / 4
+print("\nMean squared error:", loss)
