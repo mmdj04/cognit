@@ -80,7 +80,7 @@ export class Generator {
       const jsType = this.gen(node.typeAnnot, depth)
       comment = ` // :${jsType}`
     }
-    return this.genLine(`const ${node.name} = ${value};${comment}`, depth)
+    return this.genLine(`let ${node.name} = ${value};${comment}`, depth)
   }
 
   genVarBinding(node, depth) {

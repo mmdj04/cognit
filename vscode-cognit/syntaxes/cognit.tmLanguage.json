@@ -1,0 +1,74 @@
+{
+  "scopeName": "source.cognit",
+  "name": "Cognit",
+  "fileTypes": [".cgn"],
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#keywords" },
+    { "include": "#operators" },
+    { "include": "#numbers" },
+    { "include": "#functions" },
+    { "include": "#builtins" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [{
+        "begin": "#",
+        "end": "$",
+        "name": "comment.line.number-sign.cognit"
+      }]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "begin": "\"",
+          "end": "\"",
+          "name": "string.quoted.double.cognit",
+          "patterns": [{
+            "match": "\\\\.",
+            "name": "constant.character.escape.cognit"
+          }, {
+            "match": "\\{[^}]*\\}",
+            "name": "variable.other.interpolation.cognit"
+          }]
+        },
+        {
+          "begin": "'",
+          "end": "'",
+          "name": "string.quoted.single.cognit"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [{
+        "match": "\\b(let|var|fn|match|if|else|true|false|return|import|for|in|while|and|or|not|Some|None|Ok|Err|async|await|type|pub|agent)\\b",
+        "name": "keyword.control.cognit"
+      }]
+    },
+    "operators": {
+      "patterns": [{
+        "match": "(\\|>|->|==|!=|>=|<=|&&|\\|\\||\\*\\*|@)",
+        "name": "keyword.operator.cognit"
+      }]
+    },
+    "numbers": {
+      "patterns": [{
+        "match": "\\b[0-9]+(\\.[0-9]+)?\\b",
+        "name": "constant.numeric.cognit"
+      }]
+    },
+    "functions": {
+      "patterns": [{
+        "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\()",
+        "name": "support.function.cognit"
+      }]
+    },
+    "builtins": {
+      "patterns": [{
+        "match": "\\b(print|map|filter|reduce|range|len|sum|first|last|take|drop|sleep|tensor|vec|mat|eye|zeros|ones|json_parse|json_stringify|sort|reverse|chunk|unique|zip|flatten|group_by|agent_run)\\b",
+        "name": "support.function.builtin.cognit"
+      }]
+    }
+  }
+}

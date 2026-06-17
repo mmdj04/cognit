@@ -1,0 +1,23 @@
+{
+  "name": "cognit",
+  "displayName": "Cognit Language Support",
+  "description": "Syntax highlighting for Cognit (.cgn)",
+  "version": "0.1.0",
+  "publisher": "mmdj04",
+  "license": "MIT",
+  "engines": { "vscode": "^1.80.0" },
+  "categories": ["Programming Languages"],
+  "contributes": {
+    "languages": [{
+      "id": "cognit",
+      "aliases": ["Cognit", "cognit"],
+      "extensions": [".cgn"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "cognit",
+      "scopeName": "source.cognit",
+      "path": "./syntaxes/cognit.tmLanguage.json"
+    }]
+  }
+}
