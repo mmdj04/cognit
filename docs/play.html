@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cognit Playground</title>
+<style>
+  :root {
+    --bg: #262626;
+    --bg-card: #2e2e2e;
+    --bg-editor: #2a2a2a;
+    --bg-output: #262626;
+    --text: #e0e0e0;
+    --text-dim: #9e9e9e;
+    --accent: #327ac7;
+    --accent-hover: #4a9ae8;
+    --green: #4caf50;
+    --orange: #ffa726;
+    --purple: #ce93d8;
+    --pink: #f48fb1;
+    --cyan: #26c6da;
+    --border: #404040;
+    --radius: 8px;
+    --line-num: #6e6e6e;
+    --gutter: #2e2e2e;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+    background: var(--bg); color: var(--text); height: 100vh; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+
+  /* Top Bar */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 20px; border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .topbar .left { display: flex; align-items: center; gap: 16px; }
+  .topbar .logo {
+    font-size: 1.1rem; font-weight: 700; color: var(--accent);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .topbar .logo span { color: var(--text); }
+  .topbar .logo small { font-size: .65rem; color: var(--text-dim); font-weight: 400; }
+  .topbar .right { display: flex; align-items: center; gap: 12px; }
+  .topbar .right a { color: var(--text-dim); font-size: .85rem; }
+  .topbar .right a:hover { color: var(--text); text-decoration: none; }
+
+  /* Main Layout */
+  .main { display: flex; flex: 1; min-height: 0; }
+
+  /* Left Panel (Editor) */
+  .panel-left {
+    flex: 1; display: flex; flex-direction: column;
+    border-right: 1px solid var(--border); min-width: 0;
+  }
+  .panel-left .toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 16px; background: var(--bg-card);
+    border-bottom: 1px solid var(--border); flex-shrink: 0;
+  }
+  .panel-left .toolbar .label {
+    font-size: .8rem; font-weight: 600; color: var(--text-dim);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .panel-left .toolbar .label .hl { color: var(--accent); }
+  .panel-left .toolbar .actions { display: flex; gap: 8px; }
+
+  .btn-sm {
+    padding: 6px 14px; border-radius: 6px; font-size: .8rem; font-weight: 600;
+    cursor: pointer; border: 1px solid var(--border); background: transparent;
+    color: var(--text); transition: all .15s;
+  }
+  .btn-sm:hover { border-color: var(--text-dim); }
+  .btn-sm.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-sm.primary:hover { background: var(--accent-hover); }
+
+  .editor-wrap {
+    flex: 1; display: flex; position: relative; overflow: hidden;
+  }
+  .gutter {
+    width: 48px; background: var(--gutter); flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: .85rem; line-height: 1.6; padding: 16px 8px; text-align: right;
+    color: var(--line-num); overflow: hidden; user-select: none;
+    position: relative;
+  }
+  .editor-area {
+    flex: 1; position: relative; overflow: auto;
+    -ms-overflow-style: auto;
+    scrollbar-width: auto;
+  }
+  #cognit-editor {
+    width: 100%; min-height: 100%; padding: 16px 20px;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: .85rem; line-height: 1.6;
+    background: var(--bg-editor); color: var(--text);
+    border: none; outline: none; resize: none; tab-size: 4;
+    white-space: pre; overflow-wrap: normal; overflow-x: auto;
+  }
+  #cognit-editor::placeholder { color: var(--line-num); }
+
+  /* Right Panel (Output) */
+  .panel-right {
+    flex: 1; display: flex; flex-direction: column; min-width: 0;
+  }
+  .panel-right .tabs {
+    display: flex; background: var(--bg-card);
+    border-bottom: 1px solid var(--border); flex-shrink: 0;
+  }
+  .panel-right .tabs .tab {
+    padding: 8px 20px; font-size: .8rem; font-weight: 600;
+    color: var(--text-dim); cursor: pointer; border-bottom: 2px solid transparent;
+    transition: all .15s; user-select: none;
+  }
+  .panel-right .tabs .tab.active {
+    color: var(--accent); border-bottom-color: var(--accent-hover);
+  }
+  .panel-right .tabs .tab:hover { color: var(--text); }
+  .panel-right .output-area {
+    flex: 1; overflow: auto; padding: 0;
+    background: var(--bg-output);
+  }
+  .panel-right .output-area pre {
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: .85rem; line-height: 1.6; white-space: pre-wrap;
+    word-break: break-word; color: var(--text); display: none;
+  }
+  .panel-right .output-area pre.active { display: block; }
+  .panel-right .output-area pre .kw { color: var(--purple); }
+  .panel-right .output-area pre .fn { color: var(--pink); }
+  .panel-right .output-area pre .str { color: var(--green); }
+  .panel-right .output-area pre .num { color: var(--orange); }
+  .panel-right .output-area pre .cm { color: var(--text-dim); font-style: italic; }
+  .panel-right .output-area pre .op { color: var(--cyan); }
+  .panel-right .output-area pre .err { color: #f85149; }
+  .panel-right .output-area pre .out { color: var(--green); }
+  .panel-right .output-area pre .out-err { color: #f85149; }
+
+  /* Example Selector */
+  .example-select {
+    background: var(--bg-card); border: 1px solid var(--border);
+    color: var(--text); padding: 4px 10px; border-radius: 6px;
+    font-size: .8rem; outline: none; cursor: pointer;
+  }
+  .example-select option { background: var(--bg-card); color: var(--text); }
+
+  /* Output tabs */
+  .output-content { display: none; padding: 16px 20px; }
+  .output-content.active { display: block; }
+  .output-content pre {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    font-size: .85rem; line-height: 1.6; white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  @media (max-width: 768px) {
+    .main { flex-direction: column; }
+    .panel-left { border-right: none; border-bottom: 1px solid var(--border); }
+    .gutter { width: 36px; font-size: .85rem; padding: 12px 6px; }
+    .topbar .right .hide-mobile { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="left">
+    <div class="logo">λ <span>Cognit</span> <small>Playground</small></div>
+    <select class="example-select" id="example-select" onchange="loadExample(this.value)">
+      <option value="">Select example...</option>
+      <option value="hello">Hello World</option>
+      <option value="fizzbuzz">FizzBuzz</option>
+      <option value="pipeline">Functional Pipeline</option>
+      <option value="match">Pattern Matching</option>
+      <option value="fibonacci">Fibonacci</option>
+      <option value="grade">Grade Calculator</option>
+      <option value="tensor">Tensor Ops</option>
+      <option value="agent">Agent</option>
+    </select>
+  </div>
+  <div class="right">
+    <a href="index.html" class="hide-mobile">Home</a>
+    <button class="btn-sm primary" onclick="runCode()">&#9654; Run</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="panel-left">
+    <div class="toolbar">
+      <div class="label"><span class="hl">Cognit</span> Source</div>
+      <div class="actions">
+        <button class="btn-sm" onclick="formatCode()">Format</button>
+        <button class="btn-sm" onclick="clearCode()">Clear</button>
+      </div>
+    </div>
+    <div class="editor-wrap">
+      <div class="gutter" id="gutter"></div>
+      <div class="editor-area">
+        <textarea id="cognit-editor" spellcheck="false"
+          placeholder="Write Cognit code here..."
+          oninput="onEdit()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-right">
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('js', this)">JavaScript</div>
+      <div class="tab" onclick="switchTab('output', this)">Output</div>
+      <div class="tab" onclick="switchTab('errors', this)">Errors</div>
+    </div>
+    <div class="output-area">
+      <div class="output-content active" id="tab-js">
+        <pre id="js-output" style="display:block; white-space:pre-wrap; color:var(--text);"></pre>
+      </div>
+      <div class="output-content" id="tab-output">
+        <pre id="run-output" style="display:block; white-space:pre-wrap; color:var(--green);"></pre>
+      </div>
+      <div class="output-content" id="tab-errors">
+        <pre id="error-output" style="display:block; white-space:pre-wrap; color:#f85149;"></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== Cognit Compiler (Browser Bundle) ==========
+
+class Token {
+  constructor(type, value) { this.type = type; this.value = value; }
+}
+
+const Keywords = new Set([
+  "let","var","fn","match","if","else","true","false",
+  "return","import","for","in","while","and","or","not",
+  "Some","None","Ok","Err","async","await","type","pub",
+  "agent","tensor","vector",
+])
+
+class Lexer {
+  constructor(source) {
+    this.source = source; this.pos = 0; this.line = 1; this.col = 1;
+    this.tokens = []; this.indentStack = [0];
+    this.atLineStart = true; this.braceDepth = 0;
+  }
+  error(msg) { throw new Error(`Line ${this.line}: ${msg}`); }
+  peek(o=0) { return this.pos+o < this.source.length ? this.source[this.pos+o] : "\0"; }
+  advance() {
+    if (this.pos >= this.source.length) return "\0";
+    const ch = this.source[this.pos++];
+    if (ch === "\n") { this.line++; this.col = 1; } else { this.col++; }
+    return ch;
+  }
+  measureIndent() {
+    let indent = 0, saved = this.pos, savedL = this.line, savedC = this.col;
+    while (this.pos < this.source.length) {
+      const ch = this.peek();
+      if (ch === " ") { indent++; this.pos++; this.col++; }
+      else if (ch === "\t") { indent += 4; this.pos++; this.col++; }
+      else if (ch === "#") { while (this.pos < this.source.length && this.peek() !== "\n") this.pos++; }
+      else if (ch === "\n") { indent = 0; this.pos++; this.line++; this.col = 1; }
+      else if (ch === "\r") { this.pos++; }
+      else break;
+    }
+    const r = { indent, line: this.line, col: this.col };
+    this.pos = saved; this.line = savedL; this.col = savedC;
+    return r;
+  }
+  handleLineStart() {
+    if (this.braceDepth > 0) { this.atLineStart = false; return; }
+    const { indent, line, col } = this.measureIndent();
+    const top = this.indentStack[this.indentStack.length - 1];
+    if (indent > top) { this.indentStack.push(indent); this.tokens.push(new Token("Indent", indent)); }
+    else if (indent < top) {
+      while (this.indentStack.length > 1 && indent < this.indentStack[this.indentStack.length - 1]) {
+        this.indentStack.pop(); this.tokens.push(new Token("Dedent", indent));
+      }
+      if (indent !== this.indentStack[this.indentStack.length - 1])
+        this.error(`Indentation mismatch`);
+    }
+    this.atLineStart = false;
+  }
+  readString(quote) {
+    let str = "", parts = null, inExpr = false;
+    while (this.pos < this.source.length) {
+      const ch = this.advance();
+      if (ch === "\\") {
+        const next = this.advance();
+        const esc = { n:"\n", t:"\t", r:"\r", '"':'"', "'":"'", "\\":"\\", "{":"{" };
+        str += esc[next] || next;
+      } else if (ch === quote) {
+        if (parts) { if (!inExpr) parts.push(str); return parts; }
+        return str;
+      } else if (ch === "\n") { this.error("Newline in string literal"); }
+      else if (ch === "{" && !inExpr) {
+        if (parts === null) parts = [str]; else parts.push(str);
+        parts.push(""); str = ""; inExpr = true;
+      } else if (ch === "}" && inExpr) {
+        parts[parts.length-1] = str; str = ""; inExpr = false;
+      } else { str += ch; }
+    }
+    if (parts) { if (!inExpr) parts.push(str); return parts; }
+    this.error("Unterminated string");
+  }
+  readNumber() {
+    let num = "", isFloat = false;
+    while (/[0-9._]/.test(this.peek())) {
+      const ch = this.advance();
+      if (ch === "_") continue;
+      if (ch === ".") { if (isFloat) this.error("Multiple dots"); isFloat = true; }
+      num += ch;
+    }
+    return isFloat ? parseFloat(num) : parseInt(num, 10);
+  }
+  readIdentifier() {
+    let id = "";
+    while (/[a-zA-Z0-9_?!]/.test(this.peek())) id += this.advance();
+    return id;
+  }
+  skipInline() { while (this.pos < this.source.length && (this.peek() === " " || this.peek() === "\t")) this.advance(); }
+  tokenize() {
+    while (this.pos < this.source.length) {
+      if (this.atLineStart) this.handleLineStart();
+      this.skipInline();
+      if (this.pos >= this.source.length) break;
+      const ch = this.peek(), line = this.line, col = this.col;
+      if (ch === "\n") {
+        this.advance();
+        if (this.tokens.length > 0) {
+          const last = this.tokens[this.tokens.length-1];
+          if (last.type !== "Newline" && last.type !== "Indent" && last.type !== "Dedent")
+            this.tokens.push(new Token("Newline", "\n"));
+        }
+        this.atLineStart = true; continue;
+      }
+      if (ch === "#") { while (this.pos < this.source.length && this.peek() !== "\n") this.advance(); continue; }
+      if (ch === '"') { this.advance(); const r = this.readString('"'); this.tokens.push(new Token(Array.isArray(r)?"StringInterpolation":"String", r)); continue; }
+      if (ch === "'") { this.advance(); const r = this.readString("'"); this.tokens.push(new Token("String", r)); continue; }
+      if (ch === "-" && this.peek(1) === ">") { this.advance(); this.advance(); this.tokens.push(new Token("Arrow","->")); continue; }
+      if (ch === "|" && this.peek(1) === ">") { this.advance(); this.advance(); this.tokens.push(new Token("Pipe","|>")); continue; }
+      if (ch === "=" && this.peek(1) === "=") { this.advance(); this.advance(); this.tokens.push(new Token("Eq","==")); continue; }
+      if (ch === "!" && this.peek(1) === "=") { this.advance(); this.advance(); this.tokens.push(new Token("Neq","!=")); continue; }
+      if (ch === "&" && this.peek(1) === "&") { this.advance(); this.advance(); this.tokens.push(new Token("And","&&")); continue; }
+      if (ch === "|" && this.peek(1) === "|") { this.advance(); this.advance(); this.tokens.push(new Token("Or","||")); continue; }
+      if (ch === ">") { if (this.peek(1) === "=") { this.advance(); this.advance(); this.tokens.push(new Token("Gte",">=")); } else { this.advance(); this.tokens.push(new Token("Gt",">")); } continue; }
+      if (ch === "<") { if (this.peek(1) === "=") { this.advance(); this.advance(); this.tokens.push(new Token("Lte","<=")); } else { this.advance(); this.tokens.push(new Token("Lt","<")); } continue; }
+      if (ch === "*" && this.peek(1) === "*") { this.advance(); this.advance(); this.tokens.push(new Token("Op","**")); continue; }
+      if (ch === "@") { this.advance(); this.tokens.push(new Token("Op","@")); continue; }
+      if ("+-*/%".includes(ch)) { this.advance(); this.tokens.push(new Token("Op",ch)); continue; }
+      if (ch === "{") { this.advance(); this.braceDepth++; this.tokens.push(new Token("{","{")); continue; }
+      if (ch === "}") { this.advance(); this.braceDepth--; this.tokens.push(new Token("}","}")); continue; }
+      if ("()[]:,.".includes(ch)) { this.advance(); this.tokens.push(new Token(ch,ch)); continue; }
+      if (ch === "=") { this.advance(); this.tokens.push(new Token("Assign","=")); continue; }
+      if (ch === "!") { this.advance(); this.tokens.push(new Token("Not","!")); continue; }
+      if (/[0-9]/.test(ch)) { const v = this.readNumber(); this.tokens.push(new Token(Number.isInteger(v)?"Int":"Float",v)); continue; }
+      if (/[a-zA-Z_]/.test(ch)) {
+        const id = this.readIdentifier();
+        if (Keywords.has(id)) { this.tokens.push(new Token(id==="true"||id==="false"?"Bool":id,id)); }
+        else { this.tokens.push(new Token("Identifier",id)); }
+        continue;
+      }
+      this.error(`Unexpected '${ch}'`);
+    }
+    while (this.indentStack.length > 1) { this.indentStack.pop(); this.tokens.push(new Token("Dedent",null)); }
+    this.tokens.push(new Token("EOF",null));
+    return this.tokens;
+  }
+}
+
+class ASTNode {
+  constructor(type, ...props) { this.type = type; Object.assign(this, ...props); }
+}
+
+class Parser {
+  constructor(tokens) { this.tokens = tokens; this.pos = 0; }
+  error(m) { const t=this.peek(); throw new Error(`Parse error${t?` at ${t.line}:${t.col}`:""}: ${m}`); }
+  peek(o=0) { return this.pos+o < this.tokens.length ? this.tokens[this.pos+o] : null; }
+  isAt(type, value) { const t=this.peek(); return t&&t.type===type&&(value===undefined||t.value===value); }
+  expect(type, value) { const t=this.peek(); if(!t||t.type!==type||(value!==undefined&&t.value!==value)) this.error(`Expected ${value||type}, got ${t?t.type+"("+t.value+")":"EOF"}`); return this.advance(); }
+  advance() { return this.tokens[this.pos++]; }
+  skipNewlines() { while(this.isAt("Newline")) this.advance(); }
+  skipAll() { while(this.isAt("Newline")||this.isAt("Indent")||this.isAt("Dedent")) this.advance(); }
+  skipToPipe() { while(this.isAt("Newline")||this.isAt("Indent")) this.advance(); }
+  atEnd() { return this.isAt("Newline")||this.isAt("Dedent")||this.isAt("EOF")||this.isAt(")"); }
+
+  parseProgram() {
+    const nodes=[]; this.skipNewlines();
+    while(!this.isAt("EOF")){const s=this.parseStatement(); if(s) nodes.push(s); this.skipNewlines();}
+    return new ASTNode("Program",{nodes});
+  }
+  parseStatement() {
+    if(this.isAt("let")) return this.parseLetBinding();
+    if(this.isAt("var")) return this.parseVarBinding();
+    if(this.isAt("fn")) return this.parseFnDef();
+    if(this.isAt("return")) return this.parseReturn();
+    if(this.isAt("if")) return this.parseIf();
+    if(this.isAt("match")) return this.parseMatch();
+    if(this.isAt("for")) return this.parseFor();
+    if(this.isAt("while")) return this.parseWhile();
+    if(this.isAt("import")) return this.parseImport();
+    if(this.isAt("agent")) return this.parseAgent();
+    if(this.isAt("pub")){this.advance();const s=this.parseStatement();if(s)s.pub=true;return s;}
+    return this.parseExprStmt();
+  }
+  parseExprStmt(){const e=this.parseExpression();if(!e){if(this.isAt("Assign")){this.advance();return new ASTNode("ExprStmt",{expr:new ASTNode("Assign",{targets:[],value:this.parseExpression()})});}const t=this.peek();if(t)this.error(`Unexpected '${t.value}'`);return null;}return new ASTNode("ExprStmt",{expr:e});}
+  parseLetBinding(){this.advance();const name=this.expect("Identifier").value;let ta=null;if(this.isAt(":")){this.advance();ta=this.parseType();}this.expect("Assign");return new ASTNode("LetBinding",{name,typeAnnot:ta,value:this.parseExpression()});}
+  parseVarBinding(){this.advance();const name=this.expect("Identifier").value;let ta=null;if(this.isAt(":")){this.advance();ta=this.parseType();}this.expect("Assign");return new ASTNode("VarBinding",{name,typeAnnot:ta,value:this.parseExpression()});}
+  parseFnDef(){this.advance();let ia=false;if(this.isAt("async")){this.advance();ia=true;}const name=this.expect("Identifier").value;this.expect("(");const p=[];while(!this.isAt(")")&&!this.isAt("EOF")){this.skipNewlines();const pn=this.expect("Identifier").value;let pt=null;if(this.isAt(":")){this.advance();pt=this.parseType();}p.push(new ASTNode("Param",{name:pn,typeAnnot:pt}));if(this.isAt(",")){this.advance();this.skipNewlines();}}this.expect(")");let rt=null;if(this.isAt(":")){this.advance();rt=this.parseType();}return new ASTNode("FnDef",{name,params:p,returnType:rt,body:this.parseBlockOrExpr(),isAsync:ia});}
+  parseFnExpr(){this.advance();this.expect("(");const p=[];while(!this.isAt(")")&&!this.isAt("EOF")){this.skipNewlines();const pn=this.expect("Identifier").value;let pt=null;if(this.isAt(":")){this.advance();pt=this.parseType();}p.push(new ASTNode("Param",{name:pn,typeAnnot:pt}));if(this.isAt(",")){this.advance();this.skipNewlines();}}this.expect(")");return new ASTNode("FnExpr",{params:p,body:this.parseBlockOrExpr()});}
+  parseReturn(){this.advance();if(this.atEnd())return new ASTNode("Return",{value:null});return new ASTNode("Return",{value:this.parseExpression()});}
+  parseIf(){this.advance();const c=this.parseExpression();this.skipNewlines();const t=this.parseBlockOrExpr();const el=[];let eb=null;this.skipNewlines();while(this.isAt("else")){this.advance();if(this.isAt("if")){this.advance();const ec=this.parseExpression();this.skipNewlines();const eb2=this.parseBlockOrExpr();el.push(new ASTNode("If",{condition:ec,then:eb2,elifs:[],else:null}));this.skipNewlines();}else{this.skipNewlines();eb=this.parseBlockOrExpr();break;}}return new ASTNode("If",{condition:c,then:t,elifs:el,else:eb});}
+  parseMatch(){this.advance();const e=this.parseExpression();this.skipNewlines();return new ASTNode("Match",{expr:e,cases:this.parseMatchCases()});}
+  parseMatchCases(){const bs=this.isAt("{");if(bs){this.advance();this.skipNewlines();}else{this.expect("Indent");}const et=bs?"}":"Dedent";const cs=[];while(!this.isAt(et)&&!this.isAt("EOF")){this.skipNewlines();if(this.isAt(et))break;const p=this.parsePattern();this.expect("Arrow");cs.push(new ASTNode("MatchCase",{pattern:p,body:this.parseExpression()}));this.skipNewlines();}if(bs){this.expect("}");}else{this.expect("Dedent");}return cs;}
+  parsePattern(){
+    if(this.isAt("Identifier")&&this.peek().value==="None"){this.advance();return new ASTNode("Pattern",{kind:"None"});}
+    if(this.isAt("Identifier")&&this.peek().value==="Some"){this.advance();this.expect("(");const i=this.parsePattern();this.expect(")");return new ASTNode("Pattern",{kind:"Some",inner:i});}
+    if(this.isAt("Identifier")&&this.peek().value==="Ok"){this.advance();this.expect("(");const i=this.parsePattern();this.expect(")");return new ASTNode("Pattern",{kind:"Ok",inner:i});}
+    if(this.isAt("Identifier")&&this.peek().value==="Err"){this.advance();this.expect("(");const i=this.parsePattern();this.expect(")");return new ASTNode("Pattern",{kind:"Err",inner:i});}
+    if(this.isAt("(")){this.advance();const ps=[];while(!this.isAt(")")&&!this.isAt("EOF")){ps.push(this.parsePattern());if(this.isAt(","))this.advance();}this.expect(")");return new ASTNode("Pattern",{kind:"Tuple",patterns:ps});}
+    if(this.isAt("_")){this.advance();return new ASTNode("Pattern",{kind:"Wildcard"});}
+    if(this.isAt("Int")||this.isAt("Float")||this.isAt("String")||this.isAt("Bool")){return new ASTNode("Pattern",{kind:"Literal",value:this.advance().value});}
+    if(this.isAt("Identifier")){return new ASTNode("Pattern",{kind:"Binding",name:this.advance().value});}
+    this.error("Unexpected pattern");
+  }
+  parseFor(){this.advance();const n=this.expect("Identifier").value;this.expect("in");const it=this.parseExpression();this.skipNewlines();return new ASTNode("For",{name:n,iterable:it,body:this.parseBlockOrExpr()});}
+  parseWhile(){this.advance();const c=this.parseExpression();this.skipNewlines();return new ASTNode("While",{condition:c,body:this.parseBlockOrExpr()});}
+  parseImport(){this.advance();const s=this.expect("String").value;let n=null;if(this.isAt(":")){this.advance();n=[];while(!this.atEnd()&&!this.isAt("EOF")){n.push(this.expect("Identifier").value);if(this.isAt(","))this.advance();}}return new ASTNode("Import",{source:s,names:n});}
+  parseAgent(){this.advance();let n=null;if(this.isAt("String")){n=this.advance().value;}this.expect("{");this.skipNewlines();const c={};while(!this.isAt("}")&&!this.isAt("EOF")){const k=this.expect("Identifier").value;this.skipNewlines();this.expect("Assign");this.skipNewlines();c[k]=this.parseExpression();this.skipNewlines();}this.expect("}");return new ASTNode("Agent",{name:n,config:c});}
+  parseType(){const n=this.expect("Identifier").value;if(this.isAt("<")){this.advance();const p=[this.parseType()];while(this.isAt(",")){this.advance();p.push(this.parseType());}this.expect(">");return new ASTNode("Type",{name:n,params:p});}if(this.isAt("[")){this.advance();const i=this.parseType();this.expect("]");return new ASTNode("Type",{name:"Array",params:[i]});}return new ASTNode("Type",{name:n,params:[]});}
+  parseBlockOrExpr(){
+    if(this.isAt("Indent"))return this.parseBlock();
+    if(this.isAt("{"))return this.parseBraceBlock();
+    if(this.isAt("Arrow")){this.advance();return new ASTNode("Block",{nodes:[new ASTNode("ExprStmt",{expr:this.parseExpression()})],singleExpr:true});}
+    const e=this.parseExpression();return new ASTNode("Block",{nodes:[new ASTNode("ExprStmt",{expr:e})],singleExpr:true});
+  }
+  parseBlock(){this.expect("Indent");const n=[];this.skipNewlines();while(!this.isAt("Dedent")&&!this.isAt("EOF")){const s=this.parseStatement();if(s)n.push(s);this.skipNewlines();}this.expect("Dedent");return new ASTNode("Block",{nodes:n,singleExpr:false});}
+  parseBraceBlock(){this.expect("{");const n=[];this.skipNewlines();while(!this.isAt("}")&&!this.isAt("EOF")){const s=this.parseStatement();if(s)n.push(s);this.skipNewlines();}this.expect("}");return new ASTNode("Block",{nodes:n,singleExpr:false});}
+  parseExpression(){
+    let e=this.parsePrimary();if(!e)return null;
+    while(true){
+      if(this.isAt("Assign")){const t=[e];this.advance();e=new ASTNode("Assign",{targets:t,value:this.parseExpression()});continue;}
+      if(this.isAt("Newline")||this.isAt("Indent")){this.skipToPipe();continue;}
+      if(this.isAt("Dedent")){this.advance();continue;}
+      if(this.isAt("Pipe")){this.advance();const f=this.parsePipeFn();e=new ASTNode("Pipe",{expr:e,fn:f});continue;}
+      if(this.isAt("or")){this.advance();const r=this.parsePrimary();e=new ASTNode("BinaryOp",{left:e,op:"or",right:r});continue;}
+      if(this.isAt("and")){this.advance();const r=this.parsePrimary();e=new ASTNode("BinaryOp",{left:e,op:"and",right:r});continue;}
+      if(this.isAt("Eq")||this.isAt("Neq")||this.isAt("Gt")||this.isAt("Lt")||this.isAt("Gte")||this.isAt("Lte")){const o=this.advance();e=new ASTNode("BinaryOp",{left:e,op:o.value,right:this.parsePrimary()});continue;}
+      if(this.isAt("Op")){const o=this.advance();e=new ASTNode("BinaryOp",{left:e,op:o.value,right:this.parsePrimary()});continue;}
+      break;
+    }
+    return e;
+  }
+  parsePipeFn(){
+    if(this.isAt("Identifier")){const n=this.advance().value;if(this.isAt("(")){this.advance();const a=[];while(!this.isAt(")")&&!this.isAt("EOF")){a.push(this.parseExpression());if(this.isAt(","))this.advance();}this.expect(")");return new ASTNode("Call",{callee:new ASTNode("Identifier",{name:n}),args:a});}return new ASTNode("Identifier",{name:n});}
+    if(this.isAt("fn"))return this.parseFnExpr();
+    this.error("Expected function in pipe");
+  }
+  parsePrimary(){
+    this.skipNewlines();
+    if(this.isAt("Int")||this.isAt("Float")){const t=this.advance();return new ASTNode("Literal",{value:t.value,literalType:t.type==="Int"?"int":"float"});}
+    if(this.isAt("String")){const t=this.advance();return new ASTNode("Literal",{value:t.value,literalType:"string"});}
+    if(this.isAt("Bool")){const t=this.advance();return new ASTNode("Literal",{value:t.value,literalType:"bool"});}
+    if(this.isAt("StringInterpolation")){
+      const tok=this.advance(),parts=tok.value,exprs=[];
+      for(let i=1;i<parts.length;i+=2){
+        const src=parts[i];
+        try{const subLex=new Lexer(src),subToks=subLex.tokenize(),subPar=new Parser(subToks);exprs.push(subPar.parseExpression()||new ASTNode("Identifier",{name:src}));}catch(e){exprs.push(new ASTNode("Identifier",{name:src}));}
+      }
+      return new ASTNode("StringInterpolation",{parts,exprs});
+    }
+    if(this.isAt("Identifier")){
+      let e=new ASTNode("Identifier",{name:this.advance().value});
+      while(true){
+        if(this.isAt("(")){this.advance();const a=[];while(!this.isAt(")")&&!this.isAt("EOF")){this.skipNewlines();a.push(this.parseExpression());if(this.isAt(","))this.advance();}this.expect(")");e=new ASTNode("Call",{callee:e,args:a});continue;}
+        if(this.isAt(".")){this.advance();e=new ASTNode("Member",{obj:e,prop:this.expect("Identifier").value});continue;}
+        if(this.isAt("[")){this.advance();const i=this.parseExpression();this.expect("]");e=new ASTNode("Index",{obj:e,index:i});continue;}
+        break;
+      }
+      return e;
+    }
+    if(this.isAt("(")){this.advance();const e=this.parseExpression();this.expect(")");return e;}
+    if(this.isAt("[")){this.advance();const el=[];this.skipAll();while(!this.isAt("]")&&!this.isAt("EOF")){const ex=this.parseExpression();if(ex)el.push(ex);this.skipAll();if(this.isAt(",")){this.advance();this.skipAll();}}this.expect("]");return new ASTNode("List",{elements:el});}
+    if(this.isAt("{"))return this.parseDictOrBraceBlock();
+    if(this.isAt("-")||this.isAt("Not")||this.isAt("!")){const o=this.advance();return new ASTNode("UnaryOp",{op:o.value==="not"?"!":o.value,operand:this.parsePrimary()});}
+    if(this.isAt("fn"))return this.parseFnExpr();
+    if(this.isAt("if"))return this.parseIf();
+    if(this.isAt("match"))return this.parseMatch();
+    if(this.isAt("not")){this.advance();return new ASTNode("UnaryOp",{op:"!",operand:this.parsePrimary()});}
+    if(this.isAt("agent")){return this.parseAgent();}
+    return null;
+  }
+  parseDictOrBraceBlock(){
+    this.advance();this.skipNewlines();
+    if(this.isAt("}")){this.advance();return new ASTNode("Dict",{entries:[]});}
+    const f=this.parseExpression();
+    if(this.isAt(":")){this.advance();const en=[];en.push(new ASTNode("DictEntry",{key:f,value:this.parseExpression()}));while(this.isAt(",")){this.advance();this.skipNewlines();if(this.isAt("}"))break;const k=this.parseExpression();this.expect(":");en.push(new ASTNode("DictEntry",{key:k,value:this.parseExpression()}));}this.skipNewlines();this.expect("}");return new ASTNode("Dict",{entries:en});}
+    const n=[new ASTNode("ExprStmt",{expr:f})];this.skipNewlines();
+    while(!this.isAt("}")&&!this.isAt("EOF")){const s=this.parseStatement();if(s)n.push(s);this.skipNewlines();}this.expect("}");return new ASTNode("Block",{nodes:n,singleExpr:false});
+  }
+}
+
+function compileCognit(source) {
+  const lexer = new Lexer(source);
+  const tokens = lexer.tokenize();
+  const parser = new Parser(tokens);
+  const ast = parser.parseProgram();
+  const gen = new Generator();
+  return gen.gen(ast);
+}
+
+// Runtime
+// Tensor class
+class Tensor {
+  constructor(data) {
+    this.__isTensor = true;
+    this.data = data;
+    this.shape = Array.isArray(data) ? [data.length, Array.isArray(data[0]) ? data[0].length : undefined].filter(x=>x!==undefined) : [];
+  }
+  map(fn) { return new Tensor(this.data.map((r,i) => Array.isArray(r) ? r.map((v,j) => fn(v,i,j)) : fn(r,i))); }
+  add(t) { let o = t instanceof Tensor ? t.data : t; return new Tensor(elWise(this.data, o, (a,b)=>a+b)); }
+  sub(t) { let o = t instanceof Tensor ? t.data : t; return new Tensor(elWise(this.data, o, (a,b)=>a-b)); }
+  mul(t) { let o = t instanceof Tensor ? t.data : t; return new Tensor(elWise(this.data, o, (a,b)=>a*b)); }
+  div(t) { let o = t instanceof Tensor ? t.data : t; return new Tensor(elWise(this.data, o, (a,b)=>a/b)); }
+  matmul(t) { let o = t instanceof Tensor ? t.data : t; return new Tensor(mulMat(this.data, o)); }
+  transpose() { let a=this.data; if(!Array.isArray(a[0])) return new Tensor(a); return new Tensor(a[0].map((_,i)=>a.map(r=>r[i]))); }
+  dot(t) { return this.mul(t).sum(); }
+  sum() { let a=this.data; if(Array.isArray(a[0])) return a.reduce((s,r)=>s+r.reduce((ss,v)=>ss+v,0),0); return a.reduce((s,v)=>s+v,0); }
+  mean() { let a=this.data; if(Array.isArray(a[0])) return this.sum()/(a.length*a[0].length); return this.sum()/a.length; }
+  flatten() { return new Tensor(flattenArr(this.data)); }
+  reshape(...s) { return new Tensor(reshapeArr(this.flatten().data, s)); }
+  toString() { return JSON.stringify(this.data); }
+}
+function elWise(a,b,op) { if(Array.isArray(a)) return a.map((r,i)=>Array.isArray(r)?r.map((v,j)=>op(v,Array.isArray(b[0])?b[i][j]:b[i])):op(r,b)); return op(a,b); }
+function mulMat(a,b) { let r=[],m=a.length,n=b[0].length,k=b.length; for(let i=0;i<m;i++){r[i]=[];for(let j=0;j<n;j++){let s=0;for(let p=0;p<k;p++)s+=a[i][p]*b[p][j];r[i][j]=s;}}return r; }
+function flattenArr(a){let r=[];for(let v of a){if(Array.isArray(v))r.push(...flattenArr(v));else r.push(v);}return r;}
+function reshapeArr(flat,shape){if(shape.length===0)return flat[0];let size=shape[0],rest=shape.slice(1),r=[],idx=0;for(let i=0;i<size;i++){if(rest.length===0)r.push(flat[idx++]);else{let ss=flat.length/size;r.push(reshapeArr(flat.slice(idx,idx+ss),rest));idx+=ss;}}return r;}
+
+const runtime = {
+  print(...args) {
+    const out = args.map(a => typeof a === "object" && a !== null ? JSON.stringify(a) : String(a)).join(" ");
+    outputLines.push(out);
+  },
+  map(arr, fn) { return arr.map(fn); },
+  filter(arr, fn) { return arr.filter(fn); },
+  reduce(arr, fn, init) { return arr.reduce(fn, init); },
+  range(start, end, step) {
+    if (end === undefined) { end = start; start = 0; }
+    step = step || 1;
+    const r = [];
+    for (let i = start; i < end; i += step) r.push(i);
+    return r;
+  },
+  len(arr) { return arr.length; },
+  sum(arr) { return arr.reduce((a,b)=>a+b,0); },
+  first(arr) { return arr[0]; },
+  last(arr) { return arr[arr.length-1]; },
+  take(arr, n) { return arr.slice(0,n); },
+  drop(arr, n) { return arr.slice(n); },
+  sleep(ms) { return new Promise(r=>setTimeout(r,ms)); },
+  // Tensor ops
+  tensor(d) { return d && d.__isTensor ? d : new Tensor(d); },
+  vec(...a) { return new Tensor(a); },
+  mat(r) { return new Tensor(r); },
+  eye(n) { let r=[]; for(let i=0;i<n;i++){r[i]=[];for(let j=0;j<n;j++)r[i][j]=i===j?1:0;} return new Tensor(r); },
+  zeros(...s) { return fillArr(s,0); },
+  ones(...s) { return fillArr(s,1); },
+  // JSON
+  json_parse(s) { return JSON.parse(s); },
+  json_stringify(o,p) { return p ? JSON.stringify(o,null,2) : JSON.stringify(o); },
+  // Agent
+  __cognit_agent__(c) { return { __type:"agent", ...c }; },
+  agent_run(a,i) { print("[agent]", a.model || "default", "- Input:", i); return { role:"assistant", content:String(i) }; },
+  // Collections
+  sort(arr, fn) { return [...arr].sort(fn || ((a,b)=>a<b?-1:a>b?1:0)); },
+  reverse(arr) { return [...arr].reverse(); },
+  chunk(arr, s) { let r=[]; for(let i=0;i<arr.length;i+=s) r.push(arr.slice(i,i+s)); return r; },
+  unique(arr) { return [...new Set(arr)]; },
+  zip(...a) { return Array.from({length:Math.min(...a.map(x=>x.length))},(_,i)=>a.map(x=>x[i])); },
+  flatten(arr) { let r=[]; for(let v of arr){if(Array.isArray(v))r.push(...flatten(v));else r.push(v);} return r; },
+  group_by(arr, fn) { let r={}; for(let v of arr){let k=fn(v);if(!r[k])r[k]=[];r[k].push(v);} return r; },
+};
+function fillArr(s,v) { if(s.length===0) return v; let size=s[0],rest=s.slice(1),r=[]; for(let i=0;i<size;i++) r.push(rest.length>0?fillArr(rest,v):v); return r; }
+
+// Generator class
+class Generator {
+  isSingleNodeBlock(b) { return b && b.type==="Block" && b.nodes.length===1; }
+  genSingleExprValue(n,d) {
+    if(this.isSingleNodeBlock(n)&&n.nodes[0].type==="ExprStmt")return this.gen(n.nodes[0].expr,d);
+    return this.gen(n,d);
+  }
+  genBlockWithReturn(n,d) {
+    if(this.isSingleNodeBlock(n)&&n.nodes[0].type==="ExprStmt")return this.genLine(`return ${this.gen(n.nodes[0].expr,d)};`,d);
+    return this.gen(n,d);
+  }
+  gen(n,d=0){
+    if(!n)return "";
+    switch(n.type){
+      case"Program":return this.genProgram(n,d);
+      case"LetBinding":return this.genLine(`const ${n.name} = ${this.gen(n.value,d)};`,d);
+      case"VarBinding":return this.genLine(`let ${n.name} = ${this.gen(n.value,d)};`,d);
+      case"FnDef":return this.genFnDef(n,d);
+      case"FnExpr":return this.genFnExpr(n,d);
+      case"Param":return n.name;
+      case"Block":return this.genBlock(n,d);
+      case"ExprStmt":return this.genLine(this.gen(n.expr,d)+";",d);
+      case"Return":return this.genLine(n.value?`return ${this.gen(n.value,d)};`:"return;",d);
+      case"If":return this.genIf(n,d);
+      case"Match":return this.genMatch(n,d);
+      case"For":return this.genFor(n,d);
+      case"While":return this.genWhile(n,d);
+      case"Import":return"";
+      case"Assign":return `${n.targets.map(t=>this.gen(t,d)).join(", ")} = ${this.gen(n.value,d)}`;
+      case"BinaryOp":return`(${this.gen(n.left,d)} ${n.op} ${this.gen(n.right,d)})`;
+      case"UnaryOp":return`${n.op}${this.gen(n.operand,d)}`;
+      case"Call":return`${this.gen(n.callee,d)}(${n.args.map(a=>this.gen(a,d)).join(", ")})`;
+      case"Identifier":return n.name;
+      case"Literal":return n.literalType==="string"?JSON.stringify(n.value):String(n.value);
+      case"StringInterpolation":{
+        const p=[];for(let i=0;i<n.parts.length;i++){if(i%2===0)p.push(JSON.stringify(n.parts[i]));else p.push(`String(${this.gen(n.exprs[Math.floor(i/2)],d)})`);}return p.join(" + ");
+      }
+      case"List":return`[${n.elements.map(e=>this.gen(e,d)).join(", ")}]`;
+      case"Dict":return`{${n.entries.map(e=>this.gen(e,d)).join(", ")}}`;
+      case"DictEntry":return`${this.gen(n.key,d)}: ${this.gen(n.value,d)}`;
+      case"Member":return`${this.gen(n.obj,d)}.${n.prop}`;
+      case"Index":return`${this.gen(n.obj,d)}[${this.gen(n.index,d)}]`;
+      case"Pipe":{
+        if(n.fn.type==="Call"){const a=[this.gen(n.expr,d),...n.fn.args.map(x=>this.gen(x,d))];return`${this.gen(n.fn.callee,d)}(${a.join(", ")})`;}
+        return`${this.gen(n.fn,d)}(${this.gen(n.expr,d)})`;
+      }
+      case"Agent":{const e=Object.entries(n.config);let o=this.genLine("__cognit_agent__({",d);for(let i=0;i<e.length;i++){const[k,v]=e[i];o+=this.indentStr(d+1)+k+": "+this.gen(v,d)+(i<e.length-1?",":"")+"\n";}return o+this.genLine("})",d);}
+      default:return"";
+    }
+  }
+  genLine(s,d){return"  ".repeat(d)+s+"\n";}
+  genProgram(n,d){return n.nodes.map(nn=>this.gen(nn,d)).join("");}
+  genFnDef(n,d){
+    const p=n.params.map(x=>this.gen(x,d)).join(", "),ak=n.isAsync?"async ":"";
+    let o=this.genLine(`${ak}function ${n.name}(${p}) {`,d);
+    if(this.isSingleNodeBlock(n.body)){const s=n.body.nodes[0];if(s.type==="ExprStmt"||s.type==="If"||s.type==="Match")o+=this.genLine(`return ${this.gen(s.type==="ExprStmt"?s.expr:s,d+1)};`,d+1);else o+=this.gen(n.body,d+1);}
+    else o+=this.gen(n.body,d+1);
+    return o+this.genLine("}",d);
+  }
+  genFnExpr(n,d){
+    const p=n.params.map(x=>this.gen(x,d)).join(", ");let o=`function(${p}) {\n`;
+    if(this.isSingleNodeBlock(n.body)){const s=n.body.nodes[0];o+=this.indentStr(d+1)+`return ${this.gen(s.type==="ExprStmt"?s.expr:s,d+1)};\n`;}
+    else o+=this.gen(n.body,d+1);
+    return o+this.indentStr(d)+"}";
+  }
+  indentStr(n){return"  ".repeat(n);}
+  genBlock(n,d){let o="";for(const nn of n.nodes)o+=this.gen(nn,d);return o;}
+  genIf(n,d){
+    const allExpr=this.isSingleNodeBlock(n.then)&&(!n.else||this.isSingleNodeBlock(n.else))&&n.elifs.every(e=>this.isSingleNodeBlock(e.then));
+    if(allExpr){
+      if(n.elifs.length===0){const c=this.gen(n.condition,d),tv=this.genSingleExprValue(n.then,d);return n.else?`(${c} ? ${tv} : ${this.genSingleExprValue(n.else,d)})`:`(${c} ? ${tv} : undefined)`;}
+      let o=this.genLine("(function() {",d);
+      o+=this.genLine(`if (${this.gen(n.condition,d+1)}) {`,d+1);
+      o+=this.genLine(`return ${this.genSingleExprValue(n.then,d+2)};`,d+2);
+      o+=this.genLine("}",d+1);
+      for(const el of n.elifs){o+=this.genLine(`else if (${this.gen(el.condition,d+1)}) {`,d+1);o+=this.genLine(`return ${this.genSingleExprValue(el.then,d+2)};`,d+2);o+=this.genLine("}",d+1);}
+      if(n.else){o+=this.genLine("else {",d+1);o+=this.genLine(`return ${this.genSingleExprValue(n.else,d+2)};`,d+2);o+=this.genLine("}",d+1);}
+      return o+this.genLine("})()",d);
+    }
+    let o=this.genLine(`if (${this.gen(n.condition,d)}) {`,d);
+    o+=this.genBlockWithReturn(n.then,d+1);
+    o+=this.genLine("}",d);
+    for(const el of n.elifs){o+=this.genLine(`else if (${this.gen(el.condition,d)}) {`,d);o+=this.genBlockWithReturn(el.then,d+1);o+=this.genLine("}",d);}
+    if(n.else){o+=this.genLine("else {",d);o+=this.genBlockWithReturn(n.else,d+1);o+=this.genLine("}",d);}
+    return o;
+  }
+  genMatch(n,d){
+    let o=this.genLine("(function() {",d);
+    o+=this.genLine(`const __mv__ = ${this.gen(n.expr,d)};`,d+1);
+    for(const c of n.cases){o+=this.genMatchCase(c,d+1);}
+    return o+this.genLine("})()",d);
+  }
+  genMatchCase(n,d){
+    const bc=this.gen(n.body,d);
+    switch(n.pattern.kind){
+      case"Literal":return this.genLine(`if (__mv__ === ${JSON.stringify(n.pattern.value)}) { return ${bc.trim()}; }`,d);
+      case"Wildcard":return this.genLine(`{ return ${bc.trim()}; }`,d);
+      case"Binding":return this.genLine(`{ const ${n.pattern.name} = __mv__; return ${bc.trim()}; }`,d);
+      case"None":return this.genLine(`if (__mv__ === null || __mv__ === undefined) { return ${bc.trim()}; }`,d);
+      default:return this.genLine(`{ return ${bc.trim()}; }`,d);
+    }
+  }
+  genFor(n,d){let o=this.genLine(`for (const ${n.name} of ${this.gen(n.iterable,d)}) {`,d);o+=this.gen(n.body,d+1);return o+this.genLine("}",d);}
+  genWhile(n,d){let o=this.genLine(`while (${this.gen(n.condition,d)}) {`,d);o+=this.gen(n.body,d+1);return o+this.genLine("}",d);}
+}
+
+// ========== Playground UI ==========
+
+const examples = {
+  hello: `# Hello World
+fn greet(name) {
+    "Hello, {name}!"
+}
+
+print(greet("Cognit"))
+
+let numbers = [1, 2, 3, 4, 5]
+let doubled = numbers
+    |> map(fn(x) -> x * 2)
+print("Doubled: {doubled}")
+`,
+  fizzbuzz: `# FizzBuzz
+fn fizzbuzz(n) {
+    if n % 15 == 0 -> "FizzBuzz"
+    else if n % 3 == 0 -> "Fizz"
+    else if n % 5 == 0 -> "Buzz"
+    else -> n
+}
+
+for i in range(1, 16) {
+    print(fizzbuzz(i))
+}
+`,
+  pipeline: `# Functional Pipeline
+fn is_even(x) -> x % 2 == 0
+fn square(x) -> x * x
+
+let numbers = range(1, 11)
+let result = numbers
+    |> filter(fn(x) -> x % 2 == 0)
+    |> map(fn(x) -> x * x)
+    |> filter(fn(x) -> x > 10)
+    |> reduce(fn(acc, x) -> acc + x, 0)
+
+print("Numbers: {numbers}")
+print("Filtered squares sum: {result}")
+`,
+  match: `# Pattern Matching
+fn analyze(n) {
+    match n {
+        0 -> "zero"
+        1 -> "one"
+        _ -> "many"
+    }
+}
+
+for i in range(5) {
+    print("{i} -> {analyze(i)}")
+}
+`,
+  fibonacci: `# Fibonacci
+fn fib(n) {
+    if n <= 1 -> n
+    else -> fib(n - 1) + fib(n - 2)
+}
+
+for i in range(10) {
+    print("fib({i}) = {fib(i)}")
+}
+`,
+  grade: `# Grade Calculator
+fn grade(score) {
+    if score >= 90 -> "A"
+    else if score >= 80 -> "B"
+    else if score >= 70 -> "C"
+    else if score >= 60 -> "D"
+    else -> "F"
+}
+
+let scores = [95, 82, 73, 64, 55, 100]
+for s in scores {
+    print("Score {s}: {grade(s)}")
+}
+`,
+  tensor: `# Tensor Operations
+let a = vec(1, 2, 3, 4, 5)
+let b = vec(2, 4, 6, 8, 10)
+
+# Element-wise operations
+print("a + b:", tensor(a).add(b).data)
+print("a * b:", tensor(a).mul(b).data)
+print("a ** 2:", tensor(a).mul(a).data)
+
+# Matrix operations
+let m = mat([[1, 2], [3, 4]])
+let n = mat([[5, 6], [7, 8]])
+print("m @ n:", m.matmul(n).data)
+print("m transpose:", m.transpose().data)
+print("identity:", eye(3).data)
+`,
+  agent: `# Agent Configuration
+let my_agent = agent {
+    model = "gpt-4"
+    temperature = 0.7
+    instructions = "You are a helpful assistant"
+}
+
+print("Agent config:", my_agent)
+
+# Pipeline with data
+let data = range(1, 11)
+let result = data
+    |> filter(fn(x) -> x % 2 == 0)
+    |> map(fn(x) -> x * x)
+    |> reduce(fn(acc, x) -> acc + x, 0)
+
+print("Pipeline result:", result)
+`,
+}
+
+let outputLines = []
+let currentTab = "js"
+
+function loadExample(name) {
+  if (!name) return
+  const code = examples[name]
+  if (code) {
+    document.getElementById("cognit-editor").value = code.trimStart()
+    onEdit()
+  }
+}
+
+function clearCode() {
+  document.getElementById("cognit-editor").value = ""
+  onEdit()
+}
+
+function formatCode() {
+  const editor = document.getElementById("cognit-editor")
+  const lines = editor.value.split("\n")
+  const cleaned = lines.map(l => l.trimEnd()).join("\n")
+  editor.value = cleaned
+  onEdit()
+}
+
+function switchTab(tab, el) {
+  currentTab = tab
+  document.querySelectorAll(".tabs .tab").forEach(t => t.classList.remove("active"))
+  el.classList.add("active")
+  document.querySelectorAll(".output-content").forEach(t => t.classList.remove("active"))
+  document.getElementById("tab-" + tab).classList.add("active")
+}
+
+function onEdit() {
+  updateGutter()
+  autoCompile()
+}
+
+function updateGutter() {
+  const editor = document.getElementById("cognit-editor")
+  const lines = editor.value.split("\n")
+  const count = lines[lines.length - 1] === "" ? lines.length - 1 : lines.length
+  const gutter = document.getElementById("gutter")
+  gutter.innerHTML = Array.from({length: Math.max(count, 1)}, (_, i) => i + 1).join("\n")
+}
+
+function syncScroll() {
+  const area = document.querySelector(".editor-area")
+  const gutter = document.getElementById("gutter")
+  gutter.scrollTop = area.scrollTop
+}
+
+function autoCompile() {
+  if (currentTab !== "js") return
+  const source = document.getElementById("cognit-editor").value
+  const jsOut = document.getElementById("js-output")
+  const errOut = document.getElementById("error-output")
+  if (!source.trim()) {
+    jsOut.textContent = "// Write Cognit code to see the compiled JavaScript..."
+    errOut.textContent = ""
+    return
+  }
+  try {
+    const js = compileCognit(source)
+    jsOut.textContent = js
+    errOut.textContent = ""
+  } catch (e) {
+    errOut.textContent = e.message
+  }
+}
+
+function runCode() {
+  const source = document.getElementById("cognit-editor").value
+  const jsOut = document.getElementById("js-output")
+  const runOut = document.getElementById("run-output")
+  const errOut = document.getElementById("error-output")
+
+  if (!source.trim()) {
+    runOut.textContent = "Write some code first!"
+    switchTab("output", document.querySelectorAll(".tabs .tab")[1])
+    return
+  }
+
+  let js
+  try {
+    js = compileCognit(source)
+    jsOut.textContent = js
+  } catch (e) {
+    errOut.textContent = e.message
+    switchTab("errors", document.querySelectorAll(".tabs .tab")[2])
+    return
+  }
+
+  outputLines = []
+  try {
+    const fn = new Function(...Object.keys(runtime), js)
+    fn(...Object.values(runtime))
+    runOut.textContent = outputLines.join("\n") || "(no output)"
+    errOut.textContent = ""
+    switchTab("output", document.querySelectorAll(".tabs .tab")[1])
+  } catch (e) {
+    runOut.textContent = outputLines.join("\n")
+    errOut.textContent = "Runtime Error: " + e.message
+    switchTab("errors", document.querySelectorAll(".tabs .tab")[2])
+  }
+}
+
+// Initialize
+document.addEventListener("DOMContentLoaded", () => {
+  loadExample("hello")
+  updateGutter()
+  const area = document.querySelector(".editor-area")
+  area.addEventListener("scroll", syncScroll)
+})
+</script>
+
+</body>
+</html>

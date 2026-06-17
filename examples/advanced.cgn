@@ -1,0 +1,78 @@
+# Cognit Advanced Examples
+# Demonstrating the power and simplicity of Cognit
+
+# ----- Functional Pipelines -----
+
+# Data transformation with pipes
+let data = range(1, 21)
+let result = data
+    |> filter(fn(x) -> x % 2 == 0)
+    |> map(fn(x) -> x * x)
+    |> filter(fn(x) -> x > 50)
+print("Squares of evens > 50: {result}")
+
+# ----- Pattern Matching -----
+
+fn analyze(value) {
+    match value {
+        0 -> "nothing"
+        1 -> "just one"
+        2 -> "a couple"
+        _ -> "many"
+    }
+}
+
+for i in range(5) {
+    print("{i}: {analyze(i)}")
+}
+
+# ----- Recursion -----
+
+fn fibonacci(n) {
+    if n <= 1 -> n
+    else -> fibonacci(n - 1) + fibonacci(n - 2)
+}
+
+print("Fibonacci(10) = {fibonacci(10)}")
+
+# ----- Higher-Order Functions -----
+
+fn apply_twice(f, x) -> f(f(x))
+fn double(x) -> x * 2
+
+print("double(double(5)) = {apply_twice(double, 5)}")
+
+# ----- Pipeline with Anonymous Functions -----
+
+let words = ["hello", "world", "cognit", "lang"]
+let excited = words |> map(fn(w) -> w + "!")
+print("Excited: {excited}")
+
+# ----- Complex Logic with if/else -----
+
+fn fizzbuzz(n) {
+    if n % 15 == 0 -> "FizzBuzz"
+    else if n % 3 == 0 -> "Fizz"
+    else if n % 5 == 0 -> "Buzz"
+    else -> n
+}
+
+for i in range(1, 16) {
+    print(fizzbuzz(i))
+}
+
+# ----- Working with objects -----
+
+let users = [
+    {"name": "Alice", "age": 30},
+    {"name": "Bob", "age": 25},
+    {"name": "Charlie", "age": 35}
+]
+
+let names = users |> map(fn(u) -> u["name"])
+print("Names: {names}")
+
+let adults = users |> filter(fn(u) -> u["age"] >= 30)
+print("Adults: {adults}")
+
+print("Cognit is fully operational!")
