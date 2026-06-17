@@ -5,12 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cognit v0.0.1</title>
 <meta name="description" content="Cognit v0.0.1 - Everything built so far">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #262626;
   --accent: #235996;
-  --text: #fff;
-  --text-secondary: #fff;
+  --text: #ffffff;
+  --text-secondary: #ffffff;
   --card-bg: #303030;
   --border: #404040;
   --code-bg: #050505;
@@ -20,12 +23,15 @@
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+  font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.7;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
-::selection { background: var(--accent); color: #fff; }
+::selection { background: var(--accent); color: #ffffff; }
 
 /* Top bar */
 #topbar {
@@ -97,7 +103,7 @@ code {
   background: var(--code-bg);
   padding: 2px 6px;
   border-radius: 4px;
-  color: #c9d1d9;
+  color: #ffffff;
 }
 pre {
   background: var(--code-bg);
@@ -111,7 +117,7 @@ pre code { background: none; padding: 0; font-size: 0.85rem; line-height: 1.5; }
 table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
 th, td { padding: 0.5rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
 th { color: var(--accent); font-weight: 600; }
-td { color: var(--text-secondary); }
+td { color: var(--text); }
 .feature {
   background: var(--card-bg);
   border: 1px solid var(--border);
@@ -148,8 +154,8 @@ pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
   <div style="margin-bottom:2rem;">
     <div style="font-size:0.85rem; color:var(--accent); font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.25rem;">Current Release</div>
     <h1>Version 0.0.1</h1>
-    <div style="color:var(--text-secondary); font-size:1.1rem; margin-bottom:0.5rem;">17 June 2026 — Everything built in the Cognit project so far.</div>
-    <p style="color:var(--text-secondary);">Cognit is a general-purpose programming language designed for AI and robotics, compiling to JavaScript. The entire project — compiler, runtime, CLI, playground, LSP server, and tooling — was built from scratch.</p>
+    <div style="font-size:1.1rem; margin-bottom:0.5rem;">17 June 2026 — Everything built in the Cognit project so far.</div>
+    <p>Cognit is a general-purpose programming language designed for AI and robotics, compiling to JavaScript. The entire project — compiler, runtime, CLI, playground, LSP server, and tooling — was built from scratch.</p>
   </div>
 
   <div class="feature">
